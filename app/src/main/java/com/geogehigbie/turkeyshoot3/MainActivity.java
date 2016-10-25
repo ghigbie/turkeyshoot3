@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void animateTurkeyHeads(){
 
+        int numberOfTurkeys = 4;
         int baseStartValue = 800;
         int baseEndValue = 110;
         int baseDuration = 2000;
@@ -85,82 +86,124 @@ public class MainActivity extends AppCompatActivity  {
         int startValue3 = baseStartValue;
         int startValue4 = baseStartValue;
 
-        Random random1 = new Random();
-        int randomDecreaseValue1 = random1.nextInt(200);
-        Random random2 = new Random();
-        int randomDecreaseValue2 = random2.nextInt(200);
-        Random random3 = new Random();
-        int randomDecreaseValue3 = random3.nextInt(200);
-        Random random4 = new Random();
-        int randomDecreaseValue4 = random4.nextInt(200);
-
-        startValue1 = startValue1 - randomDecreaseValue1;
-        startValue2 = startValue2 - randomDecreaseValue2;
-        startValue3 = startValue3 - randomDecreaseValue3;
-        startValue4 = startValue4 - randomDecreaseValue4;
-
         int endValue1 = baseEndValue;
         int endValue2 = baseEndValue;
         int endValue3 = baseEndValue;
         int endValue4 = baseEndValue;
-
-        Random random5 = new Random();
-        int randomIncreaseValue1 = random5.nextInt(150);
-        Random random6 = new Random();
-        int randomIncreaseValue2 = random6.nextInt(150);
-        Random random7 = new Random();
-        int randomIncreaseValue3 = random7.nextInt(150);
-        Random random8 = new Random();
-        int randomIncreaseValue4 = random8.nextInt(150);
 
         int duration1 = baseDuration;
         int duration2 = baseDuration;
         int duration3 = baseDuration;
         int duration4 = baseDuration;
 
-        Random random9 = new Random();
-        int randomDecreaseDurationValue1 = random9.nextInt(300);
-        Random random10 = new Random();
-        int randomDecreaseDurationValue2 = random10.nextInt(300);
-        Random random11 = new Random();
-        int randomDecreaseDurationValue3 = random11.nextInt(300);
-        Random random12 = new Random();
-        int randomDecreaseDurationValue4 = random12.nextInt(300);
-
-        duration1 = baseDuration - randomDecreaseDurationValue1;
-        duration2 = baseDuration - randomDecreaseDurationValue2;
-        duration3 = baseDuration - randomDecreaseDurationValue3;
-        duration4 = baseDuration - randomDecreaseDurationValue4;
-
-        //I could put this in a loop, but the code might get too complicated
-
-//        int numberOfTurkHeads = 4;
-//        for(int a=0; a< numberOfTurkHeads; a++){
-//            Random
-//        }
-
-
-        endValue1 = endValue1 + randomIncreaseValue1;
-        endValue2 = endValue2 + randomIncreaseValue2;
-        endValue3 = endValue3 + randomIncreaseValue3;
-        endValue4 = endValue4 + randomIncreaseValue4;
-
         ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
         ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
         ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
         ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
 
-        //should start at 800 or lower
-        TurkeyHead turkeyHeadObject1 = new TurkeyHead(turkeyHead1, 100, 300, 0, 0, startValue1, endValue1, duration1, 10, 10, true);
-        TurkeyHead turkeyHeadObject2 = new TurkeyHead(turkeyHead1, 200, 400, 0, 0, startValue2, endValue2, duration2, 10, 10, true);
-        TurkeyHead turkeyHeadObject3 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue3, endValue3, duration3, 10, 10, false);
-        TurkeyHead turkeyHeadObject4 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue4, endValue4, duration4, 10, 10, false);
+//        TurkeyHead turkeyHeadObject1 = new TurkeyHead(turkeyHead1, 100, 300, 0, 0, startValue1, endValue1, duration1, 10, 10, true);
+//        TurkeyHead turkeyHeadObject2 = new TurkeyHead(turkeyHead1, 200, 400, 0, 0, startValue2, endValue2, duration2, 10, 10, true);
+//        TurkeyHead turkeyHeadObject3 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue3, endValue3, duration3, 10, 10, false);
+//        TurkeyHead turkeyHeadObject4 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue4, endValue4, duration4, 10, 10, false);
+//
+
+        int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
+        int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
+        int[] durationArray = {duration1, duration2, duration3, duration4};
+        ImageView [] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
 
 
-        turkeyHeadObject1.translateAninimation(turkeyHead1);
-        turkeyHeadObject2.translateAninimation(turkeyHead2);
-        turkeyHeadObject3.translateAninimation(turkeyHead3);
-        turkeyHeadObject4.translateAninimation(turkeyHead4);
+        for(int a = 0; a < numberOfTurkeys; a++){
+            Random random1 = new Random();
+            int randomDecreaseValue = random1.nextInt(200);
+            startValueArray[a] = startValueArray[a] - randomDecreaseValue;
+
+            Random random2 = new Random();
+            int randomIncreaseValue = random2.nextInt(150);
+            endValueArray[a] = endValueArray[a] + randomIncreaseValue;
+
+            Random random3 = new Random();
+            int randomDecreaseDurationValue = random3.nextInt(300);
+            durationArray[a] = durationArray[a] + randomDecreaseDurationValue;
+
+            TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], 200, 400, 0, 0,
+                    startValueArray[a], endValueArray[a], durationArray[a], 10, 10, true);
+
+            turkeyHeadObject.translateAninimation(turkeyHeadImageArray[a]);
+
+        }
+
+//
+//
+//
+//        Random random1 = new Random();
+//        int randomDecreaseValue1 = random1.nextInt(200);
+//        Random random2 = new Random();
+//        int randomDecreaseValue2 = random2.nextInt(200);
+//        Random random3 = new Random();
+//        int randomDecreaseValue3 = random3.nextInt(200);
+//        Random random4 = new Random();
+//        int randomDecreaseValue4 = random4.nextInt(200);
+
+//        startValue1 = startValue1 - randomDecreaseValue1;
+//        startValue2 = startValue2 - randomDecreaseValue2;
+//        startValue3 = startValue3 - randomDecreaseValue3;
+//        startValue4 = startValue4 - randomDecreaseValue4;
+//
+//        int endValue1 = baseEndValue;
+//        int endValue2 = baseEndValue;
+//        int endValue3 = baseEndValue;
+//        int endValue4 = baseEndValue;
+//
+//        Random random5 = new Random();
+//        int randomIncreaseValue1 = random5.nextInt(150);
+//        Random random6 = new Random();
+//        int randomIncreaseValue2 = random6.nextInt(150);
+//        Random random7 = new Random();
+//        int randomIncreaseValue3 = random7.nextInt(150);
+//        Random random8 = new Random();
+//        int randomIncreaseValue4 = random8.nextInt(150);
+//
+//        int duration1 = baseDuration;
+//        int duration2 = baseDuration;
+//        int duration3 = baseDuration;
+//        int duration4 = baseDuration;
+//
+//        Random random9 = new Random();
+//        int randomDecreaseDurationValue1 = random9.nextInt(300);
+//        Random random10 = new Random();
+//        int randomDecreaseDurationValue2 = random10.nextInt(300);
+//        Random random11 = new Random();
+//        int randomDecreaseDurationValue3 = random11.nextInt(300);
+//        Random random12 = new Random();
+//        int randomDecreaseDurationValue4 = random12.nextInt(300);
+//
+//        duration1 = baseDuration - randomDecreaseDurationValue1;
+//        duration2 = baseDuration - randomDecreaseDurationValue2;
+//        duration3 = baseDuration - randomDecreaseDurationValue3;
+//        duration4 = baseDuration - randomDecreaseDurationValue4;
+//
+//        endValue1 = endValue1 + randomIncreaseValue1;
+//        endValue2 = endValue2 + randomIncreaseValue2;
+//        endValue3 = endValue3 + randomIncreaseValue3;
+//        endValue4 = endValue4 + randomIncreaseValue4;
+//
+//        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+//        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+//        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+//        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+
+//
+//        TurkeyHead turkeyHeadObject1 = new TurkeyHead(turkeyHead1, 100, 300, 0, 0, startValue1, endValue1, duration1, 10, 10, true);
+//        TurkeyHead turkeyHeadObject2 = new TurkeyHead(turkeyHead1, 200, 400, 0, 0, startValue2, endValue2, duration2, 10, 10, true);
+//        TurkeyHead turkeyHeadObject3 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue3, endValue3, duration3, 10, 10, false);
+//        TurkeyHead turkeyHeadObject4 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue4, endValue4, duration4, 10, 10, false);
+//
+//
+//        turkeyHeadObject1.translateAninimation(turkeyHead1);
+//        turkeyHeadObject2.translateAninimation(turkeyHead2);
+//        turkeyHeadObject3.translateAninimation(turkeyHead3);
+//        turkeyHeadObject4.translateAninimation(turkeyHead4);
     }
 
 
