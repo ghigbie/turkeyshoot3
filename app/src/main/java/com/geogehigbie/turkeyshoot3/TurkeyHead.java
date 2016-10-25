@@ -49,7 +49,7 @@ public class TurkeyHead {
 
     }
 
-    public void translateAninimation(ImageView imageKind){
+    public void translateAninimation(final ImageView imageKind) {
 
         TranslateAnimation animation1 = new TranslateAnimation(XBegin, XEnd, YBegin, YEnd);
         animation1.setDuration(Duration);
@@ -60,7 +60,26 @@ public class TurkeyHead {
         imageKind.startAnimation(animation1);
 
 
+        animation1.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
+    public void alphaAnimation(){
+
+    }
 
 }

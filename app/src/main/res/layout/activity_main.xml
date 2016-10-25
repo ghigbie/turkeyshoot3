@@ -8,6 +8,16 @@
     android:orientation="vertical"
     android:weightSum="6">
 
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/points"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#d7d5d5"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,6 +51,7 @@
                         android:src="@drawable/small_head"
                         android:translationY="210dp"
                         android:layout_weight="1"
+                        android:onClick="onClickTurkey1"
                         />
 
                     <ImageView
@@ -50,6 +61,7 @@
                         android:src="@drawable/small_head"
                         android:translationY="210dp"
                         android:layout_weight="1"
+                        android:onClick="onClickTurkey2"
                         />
 
                     <ImageView
@@ -59,6 +71,7 @@
                         android:src="@drawable/small_head"
                         android:translationY="210dp"
                         android:layout_weight="1"
+                        android:onClick="onClickTurkey3"
                         />
 
                     <ImageView
@@ -68,6 +81,7 @@
                         android:src="@drawable/small_head"
                         android:translationY="210dp"
                         android:layout_weight="1"
+                        android:onClick="onClickTurkey4"
                         />
 
 

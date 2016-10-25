@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TurkeyShoot3</string>
+    <string name="points">Points</string>
 </resources>

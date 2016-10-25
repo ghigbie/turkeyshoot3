@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Random;
 
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity  {
     //level increase variables
     int level = 2;
     int durationLevelUp = 200 * level;
+
+
+    int points = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,4 +239,42 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    public void playTurkeyCry(){
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_cry);
+        mediaPlayer.start();
+
+    }
+
+
+
+    public void turkeyShot(){
+        points += 10;
+
+        TextView pointsText = (TextView) findViewById(R.id.points);
+        pointsText.setText("Points " + Integer.toString(points));
+        pointsText.bringToFront();
+
+        playTurkeyCry();
+
+    }
+
+
+    public void onClickTurkey1(View view){
+        turkeyShot();
+    }
+
+
+    public void onClickTurkey2(View view){
+        turkeyShot();
+    }
+
+
+    public void onClickTurkey3(View view){
+        turkeyShot();
+    }
+
+
+    public void onClickTurkey4(View view){
+        turkeyShot();
+    }
 }
