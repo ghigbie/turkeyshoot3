@@ -42,7 +42,6 @@ public class TurkeyHead {
         RepeatMode = repeatMode;
         FillAfter = fillAfter;
 
-
     }
 
 

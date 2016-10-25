@@ -13,6 +13,10 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity  {
 
+    //level increase variables
+    int level = 2;
+    int durationLevelUp = 200 * level;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,11 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
+    public void levelUp(){
+        level = level++;
+        durationLevelUp = 200 * level;
+    }
+
 
 
 
@@ -76,20 +85,29 @@ public class MainActivity extends AppCompatActivity  {
 
     public void animateTurkeyHeads(){
 
+        //these values control turkey head behavior
+
         int numberOfTurkeys = 4;
-        int baseStartValue = 800;
-        int baseEndValue = 110;
-        int baseDuration = 2000;
+        int turkeyHeight = 100;
+        int turkeyWidth = 100;
+        int baseStartValueX = 0;
+        int baseEndValueX = 0;
+        int baseStartValueY = 800;
+        int baseEndValueY = -600;
+        int baseDuration = 1500;
+        int repeatCount = 10;
+        int repeatMode = 10;
+        boolean fillAfter = false;
 
-        int startValue1 = baseStartValue;
-        int startValue2 = baseStartValue;
-        int startValue3 = baseStartValue;
-        int startValue4 = baseStartValue;
+        int startValue1 = baseStartValueY;
+        int startValue2 = baseStartValueY;
+        int startValue3 = baseStartValueY;
+        int startValue4 = baseStartValueY;
 
-        int endValue1 = baseEndValue;
-        int endValue2 = baseEndValue;
-        int endValue3 = baseEndValue;
-        int endValue4 = baseEndValue;
+        int endValue1 = baseEndValueY;
+        int endValue2 = baseEndValueY;
+        int endValue3 = baseEndValueY;
+        int endValue4 = baseEndValueY;
 
         int duration1 = baseDuration;
         int duration2 = baseDuration;
@@ -100,12 +118,6 @@ public class MainActivity extends AppCompatActivity  {
         ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
         ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
         ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
-
-//        TurkeyHead turkeyHeadObject1 = new TurkeyHead(turkeyHead1, 100, 300, 0, 0, startValue1, endValue1, duration1, 10, 10, true);
-//        TurkeyHead turkeyHeadObject2 = new TurkeyHead(turkeyHead1, 200, 400, 0, 0, startValue2, endValue2, duration2, 10, 10, true);
-//        TurkeyHead turkeyHeadObject3 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue3, endValue3, duration3, 10, 10, false);
-//        TurkeyHead turkeyHeadObject4 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue4, endValue4, duration4, 10, 10, false);
-//
 
         int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
         int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
@@ -123,11 +135,12 @@ public class MainActivity extends AppCompatActivity  {
             endValueArray[a] = endValueArray[a] + randomIncreaseValue;
 
             Random random3 = new Random();
-            int randomDecreaseDurationValue = random3.nextInt(300);
-            durationArray[a] = durationArray[a] + randomDecreaseDurationValue;
+            int randomDecreaseDurationValue = random3.nextInt(500);
+            durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
 
-            TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], 200, 400, 0, 0,
-                    startValueArray[a], endValueArray[a], durationArray[a], 10, 10, true);
+//these values below should be put into a control panel above
+            TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], turkeyHeight, turkeyWidth, baseStartValueX,
+                    baseEndValueX, startValueArray[a], endValueArray[a], durationArray[a], repeatCount, repeatMode, fillAfter);
 
             turkeyHeadObject.translateAninimation(turkeyHeadImageArray[a]);
 
