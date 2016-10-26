@@ -1,5 +1,6 @@
 package com.geogehigbie.turkeyshoot3;
 
+import android.animation.ValueAnimator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -68,7 +69,7 @@ public class TurkeyHead {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
+                //TranslateAnimation animation2 = new TranslateAnimation();
             }
 
             @Override
@@ -79,6 +80,15 @@ public class TurkeyHead {
     }
 
     public void alphaAnimation(){
+
+    }
+
+    public void valueTranslateAnimation(){
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(YBegin, YEnd);
+        valueAnimator.setDuration(Duration);
+        valueAnimator.setRepeatCount(RepeatCount);
+        valueAnimator.setRepeatMode(RepeatMode);
 
     }
 

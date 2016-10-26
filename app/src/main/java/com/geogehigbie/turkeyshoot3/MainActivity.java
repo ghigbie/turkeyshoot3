@@ -3,6 +3,7 @@ package com.geogehigbie.turkeyshoot3;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity  {
     int durationLevelUp = 200 * level;
 
 
-    int points = 0;
+    public int points = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity  {
         int baseDuration = 1500;
         int repeatCount = 10;
         int repeatMode = 10;
-        boolean fillAfter = false;
+        boolean fillAfter = true;
 
         int startValue1 = baseStartValueY;
         int startValue2 = baseStartValueY;
@@ -245,11 +246,13 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+   // public static TextView pointsText = (TextView) findViewById(R.id.points);
 
 
     public void turkeyShot(){
         points += 10;
 
+        Log.i("points", "turkeyShot: called ");
         TextView pointsText = (TextView) findViewById(R.id.points);
         pointsText.setText("Points " + Integer.toString(points));
         pointsText.bringToFront();
