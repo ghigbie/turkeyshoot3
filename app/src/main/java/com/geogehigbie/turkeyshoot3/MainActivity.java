@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity  {
         int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
         int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
         int[] durationArray = {duration1, duration2, duration3, duration4};
+
         ImageView [] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
 
 
@@ -143,7 +144,15 @@ public class MainActivity extends AppCompatActivity  {
             int randomDecreaseDurationValue = random3.nextInt(500);
             durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
 
-//these values below should be put into a control panel above
+            turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    turkeyShot();
+                }
+
+            });
+
+            //these values below should be put into a control panel above
             TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], turkeyHeight, turkeyWidth, baseStartValueX,
                     baseEndValueX, startValueArray[a], endValueArray[a], durationArray[a], repeatCount, repeatMode, fillAfter);
 
@@ -261,23 +270,23 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-
-    public void onClickTurkey1(View view){
-        turkeyShot();
-    }
-
-
-    public void onClickTurkey2(View view){
-        turkeyShot();
-    }
-
-
-    public void onClickTurkey3(View view){
-        turkeyShot();
-    }
-
-
-    public void onClickTurkey4(View view){
-        turkeyShot();
-    }
+//
+//    public void onClickTurkey1(View view){
+//        turkeyShot();
+//    }
+//
+//
+//    public void onClickTurkey2(View view){
+//        turkeyShot();
+//    }
+//
+//
+//    public void onClickTurkey3(View view){
+//        turkeyShot();
+//    }
+//
+//
+//    public void onClickTurkey4(View view){
+//        turkeyShot();
+//    }
 }
