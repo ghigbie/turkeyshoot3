@@ -27,11 +27,28 @@
 
     <LinearLayout
         android:id="@+id/sky_layout"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:background="@drawable/sky_gradient"
         android:layout_weight="2">
+
+        <ImageView
+            android:id="@+id/cloud1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="end"
+            android:src="@drawable/cloud_wight"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/cloud2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/cloud_wight"
+            android:visibility="invisible"/>
+
     </LinearLayout>
 
     <LinearLayout

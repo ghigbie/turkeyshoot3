@@ -50,6 +50,7 @@ public class TurkeyHead {
 
     }
 
+
     public void translateAninimation(final ImageView imageKind) {
 
         TranslateAnimation animation1 = new TranslateAnimation(XBegin, XEnd, YBegin, YEnd);
