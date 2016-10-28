@@ -52,13 +52,26 @@
     </LinearLayout>
 
     <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:id="@+id/grass"
                 android:layout_width="match_parent"
                 android:layout_height="225dp"
                 android:background="@drawable/grass_texture"
-                android:layout_weight="2"
                 android:weightSum="4">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"/>
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/turkey_container"
+            android:layout_weight="2.5"
+            android:weightSum="4">
 
 
                   <ImageView
@@ -100,6 +113,8 @@
                         android:layout_weight="1"
                         android:onClick="onClickTurkey4"
                         />
+
+            </LinearLayout>
 
 
             </LinearLayout>
