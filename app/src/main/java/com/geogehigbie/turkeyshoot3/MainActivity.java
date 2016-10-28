@@ -1,5 +1,7 @@
 package com.geogehigbie.turkeyshoot3;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -146,6 +148,8 @@ public class MainActivity extends AppCompatActivity  {
             int randomDecreaseDurationValue = random3.nextInt(500);
             durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
 
+            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
+            //turkeyHeadImageArray[a].setClickable(true);
             turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -154,13 +158,33 @@ public class MainActivity extends AppCompatActivity  {
 
             });
 
+            ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
+                    endValueArray[a]);
+            yAnimTurkeyHead.setDuration(durationArray[a]);
+            yAnimTurkeyHead.setRepeatCount(20);
+            yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
+            yAnimTurkeyHead.start();
+
             //these values below should be put into a control panel above
             TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], turkeyHeight, turkeyWidth, baseStartValueX,
                     baseEndValueX, startValueArray[a], endValueArray[a], durationArray[a], repeatCount, repeatMode, fillAfter);
 
-            turkeyHeadObject.translateAninimation(turkeyHeadImageArray[a]);
+          //  turkeyHeadObject.translateAninimation(turkeyHeadImageArray[a]);
+          //  turkeyHeadObject.objectAnimationMotionY(turkeyHeadImageArray[a]);
 
-        }
+
+            }
+
+//        ObjectAnimator yAnim = ObjectAnimator.ofFloat(turkeyHead1, "y",
+//                turkeyHead1.getY(), turkeyHead1.getHeight() - 50f);
+//        yAnim.setDuration(duration1);
+//        yAnim.setRepeatCount(20);
+//        yAnim.setRepeatMode(ValueAnimator.REVERSE);
+//       // yAnim.setInterpolator(new AccelerateInterpolator(2f));
+//        //yAnim.addUpdateListener(this);
+//        //yAnim.addListener(this);
+//        yAnim.start();
+    }
 
 //
 //
@@ -233,7 +257,7 @@ public class MainActivity extends AppCompatActivity  {
 //        turkeyHeadObject2.translateAninimation(turkeyHead2);
 //        turkeyHeadObject3.translateAninimation(turkeyHead3);
 //        turkeyHeadObject4.translateAninimation(turkeyHead4);
-    }
+
 
     public void cloudMotion(){
         ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);

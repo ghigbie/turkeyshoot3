@@ -1,5 +1,7 @@
 package com.geogehigbie.turkeyshoot3;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -91,6 +93,16 @@ public class TurkeyHead {
         valueAnimator.setRepeatCount(RepeatCount);
         valueAnimator.setRepeatMode(RepeatMode);
 
+    }
+
+    public void objectAnimationMotionY(ImageView imageView){
+
+        ObjectAnimator animX = ObjectAnimator.ofFloat(imageView, "x", 0f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(imageView, "y", YEnd);
+        AnimatorSet animSetXY = new AnimatorSet();
+        animSetXY.playTogether(animX, animY);
+        animSetXY.setDuration(Duration);
+        animSetXY.start();
     }
 
 }
