@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity  {
         animateTurkeyHeads();
         playInitialGobble();
         cloudMotion();
+        cowMotion();
 
     }
 
@@ -240,12 +241,22 @@ public class MainActivity extends AppCompatActivity  {
         ImageView cloud2 = (ImageView) findViewById(R.id.cloud2);
         cloud2.setVisibility(View.VISIBLE);
 
-        Cloud cloudRightToLeft = new Cloud(cloud1, 200, 200, -300, 1200, 0, 0, 10000, 10, Animation.RESTART, false);
-        Cloud cloudLeftToRight = new Cloud(cloud2, 200, 200, 300, -1200, 0, 0, 13000, 10, Animation.RESTART, false);
+        Cloud cloudRightToLeft = new Cloud(cloud1, 200, 200, -300, 1200, 0, 0, 10000, 15, Animation.RESTART, false);
+        Cloud cloudLeftToRight = new Cloud(cloud2, 200, 200, 300, -1200, 0, 0, 13000, 15, Animation.RESTART, false);
 
         cloudLeftToRight.translateAnimation(cloud1);
         cloudRightToLeft.translateAnimation(cloud2);
 
+
+    }
+
+    public void cowMotion(){
+        ImageView cow1 = (ImageView) findViewById(R.id.cow1);
+        cow1.setVisibility(View.VISIBLE);
+
+        Cow cowRighttoLeft = new Cow(cow1, 50, 50, 1200, -200, 0, 0, 25000, 15, Animation.RESTART, false);
+
+        cowRighttoLeft.translateAnimation(cow1);
     }
 
 

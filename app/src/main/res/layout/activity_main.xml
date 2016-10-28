@@ -4,19 +4,19 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.geogehigbie.turkeyshoot3.MainActivity"
     android:orientation="vertical"
-    android:weightSum="6">
+    android:weightSum="6"
+    tools:context="com.geogehigbie.turkeyshoot3.MainActivity">
 
     <TextView
         android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:text="@string/points"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="#d7d5d5"/>
+        android:textColor="#d7d5d5" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,129 +25,134 @@
         android:weightSum="6">
 
 
-    <LinearLayout
-        android:id="@+id/sky_layout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@drawable/sky_gradient"
-        android:layout_weight="2">
+        <LinearLayout
+            android:id="@+id/sky_layout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_weight="2"
+            android:background="@drawable/sky_gradient"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/cloud1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/cloud_wight"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/cloud2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/cloud_wight"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/grass"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:background="@drawable/grass_texture"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5">
+
+                <ImageView
+                    android:id="@+id/cow1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/cow_horns"
+                    android:layout_gravity="end"
+                    android:visibility="invisible"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:id="@+id/turkey_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.5"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+
+                <ImageView
+                    android:id="@+id/turkey_head1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onClickTurkey1"
+                    android:src="@drawable/small_head"
+                    android:translationY="210dp" />
+
+                <ImageView
+                    android:id="@+id/turkey_head2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onClickTurkey2"
+                    android:src="@drawable/small_head"
+                    android:translationY="210dp" />
+
+                <ImageView
+                    android:id="@+id/turkey_head3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onClickTurkey3"
+                    android:src="@drawable/small_head"
+                    android:translationY="210dp" />
+
+                <ImageView
+                    android:id="@+id/turkey_head4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onClickTurkey4"
+                    android:src="@drawable/small_head"
+                    android:translationY="210dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
         <ImageView
-            android:id="@+id/cloud1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="25dp"
-            android:layout_gravity="end"
-            android:src="@drawable/cloud_wight"
-            android:visibility="invisible"/>
-
-        <ImageView
-            android:id="@+id/cloud2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/cloud_wight"
-            android:visibility="invisible"/>
+            android:id="@+id/wood_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/wood_grain"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 
-    <LinearLayout
-                android:orientation="vertical"
-                android:id="@+id/grass"
-                android:layout_width="match_parent"
-                android:layout_height="225dp"
-                android:background="@drawable/grass_texture"
-                android:weightSum="4">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"/>
+    <ImageView
+        android:id="@+id/big_turkey_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/turkey_body" />
 
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/turkey_container"
-            android:layout_weight="2.5"
-            android:weightSum="4">
-
-
-                  <ImageView
-                        android:id="@+id/turkey_head1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/small_head"
-                        android:translationY="210dp"
-                        android:layout_weight="1"
-                        android:onClick="onClickTurkey1"
-                        />
-
-                    <ImageView
-                        android:id="@+id/turkey_head2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/small_head"
-                        android:translationY="210dp"
-                        android:layout_weight="1"
-                        android:onClick="onClickTurkey2"
-                        />
-
-                    <ImageView
-                        android:id="@+id/turkey_head3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/small_head"
-                        android:translationY="210dp"
-                        android:layout_weight="1"
-                        android:onClick="onClickTurkey3"
-                        />
-
-                    <ImageView
-                        android:id="@+id/turkey_head4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/small_head"
-                        android:translationY="210dp"
-                        android:layout_weight="1"
-                        android:onClick="onClickTurkey4"
-                        />
-
-            </LinearLayout>
-
-
-            </LinearLayout>
-
-
-
-            <ImageView
-                android:layout_weight="1"
-                android:id="@+id/wood_base"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@drawable/wood_grain" />
-
-</LinearLayout>
-
-
-       <ImageView
-            android:id="@+id/big_turkey_body"
-            android:src="@drawable/turkey_body"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-        <Button
-            android:id="@+id/start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="  Click to Play  "
-            android:onClick="clickToPlay"
-            android:layout_centerInParent="true"
-            android:background="#ed6d11"/>
-
-
-
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#ed6d11"
+        android:onClick="clickToPlay"
+        android:text="  Click to Play  " />
 
 
 </RelativeLayout>
