@@ -1,16 +1,19 @@
 package com.geogehigbie.turkeyshoot3;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public int points = 0;
+
+    private int touchXLocation;
+    private int touchYLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +107,8 @@ public class MainActivity extends AppCompatActivity  {
         int turkeyWidth = 100;
         int baseStartValueX = 0;
         int baseEndValueX = 0;
-        int baseStartValueY = 800;
-        int baseEndValueY = -600;
+        final int baseStartValueY = 800;
+        int baseEndValueY = 90;
         int baseDuration = 1500;
         int repeatCount = 10;
         int repeatMode = 10;
@@ -123,16 +129,16 @@ public class MainActivity extends AppCompatActivity  {
         int duration3 = baseDuration;
         int duration4 = baseDuration;
 
-        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
-        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
-        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
-        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+        final ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        final ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        final ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        final ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
 
         int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
         int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
         int[] durationArray = {duration1, duration2, duration3, duration4};
 
-        ImageView [] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
+        final ImageView [] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
 
 
         for(int a = 0; a < numberOfTurkeys; a++){
@@ -148,22 +154,113 @@ public class MainActivity extends AppCompatActivity  {
             int randomDecreaseDurationValue = random3.nextInt(500);
             durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
 
-            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
-            //turkeyHeadImageArray[a].setClickable(true);
-            turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    turkeyShot();
-                }
+//            property animation - does not do as much
+//            turkeyHeadImageArray[a].animate()
+//                    .translationX(0)
+//                    .translationY(endValueArray[a])
+//                    .setDuration(durationArray[a]);
 
-            });
-
-            ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
+            final ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
                     endValueArray[a]);
             yAnimTurkeyHead.setDuration(durationArray[a]);
             yAnimTurkeyHead.setRepeatCount(20);
             yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
             yAnimTurkeyHead.start();
+            yAnimTurkeyHead.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    turkeyHead1.animate().translationY(baseStartValueY);
+                    turkeyHead2.animate().translationY(baseStartValueY);
+                    turkeyHead3.animate().translationY(baseStartValueY);
+                    turkeyHead4.animate().translationY(baseStartValueY);
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
+            turkeyHeadImageArray[a].setClickable(true);
+            turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                        turkeyShot();
+                        v.getX();
+                        v.getY();
+
+                    final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+
+                    final ImageView turkeyAngel = new ImageView(getApplicationContext());
+                    turkeyAngel.setImageResource(R.drawable.blood_splatter);
+                    turkeyAngel.setVisibility(View.VISIBLE);
+                    turkeyAngel.setMaxWidth(50);
+                    turkeyAngel.setMaxHeight(50);
+                    turkeyAngel.setX(v.getX());
+                    turkeyAngel.setY(v.getY());
+                    relativeLayout.addView(turkeyAngel);
+
+
+
+//                    if(v == turkeyHead1){
+//                            //turkeyHead1.setVisibility(View.);
+//                            turkeyHead1.setImageResource(R.drawable.blood_splatter_dark);
+//                            //yAnimTurkeyHead.end();
+//                        }
+//                        else if(v == turkeyHead2){
+//                           // turkeyHead2.setVisibility(View.GONE);
+//                            turkeyHead2.setImageResource(R.drawable.blood_splatter_dark);
+//                        }
+//                        else if(v == turkeyHead3){
+//                            //turkeyHead3.setVisibility(View.GONE);
+//                            turkeyHead3.setImageResource(R.drawable.blood_splatter_dark);
+//                        }
+//                        else if(v == turkeyHead4){
+//                            //turkeyHead4.setVisibility(View.GONE);
+//                            turkeyHead4.setImageResource(R.drawable.blood_splatter_dark);
+//                        }
+                }
+            });
+
+//            final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+//
+//            final ImageView turkeyAngel = new ImageView(getApplicationContext());
+//            turkeyAngel.setImageResource(R.drawable.blood_splatter);
+//            turkeyAngel.setVisibility(View.VISIBLE);
+//            turkeyAngel.setMaxWidth(50);
+//            turkeyAngel.setMaxHeight(50);
+            //relativeLayout.addView(turkeyAngel);
+
+           // turkeyAngel.animate().translationY(-2000).setDuration(1000);
+
+
+//            turkeyHeadImageArray[a].setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_DOWN){
+//                        relativeLayout.addView(turkeyAngel);
+//                                turkeyAngel.setX(event.getX());
+//                                turkeyAngel.setY(event.getY());
+//                               // turkeyAngel.animate().translationY(-2000).setDuration(1000);
+//                    }
+//                    return true;
+//                }
+//            });
+
+
 
             //these values below should be put into a control panel above
             TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], turkeyHeight, turkeyWidth, baseStartValueX,
@@ -259,6 +356,19 @@ public class MainActivity extends AppCompatActivity  {
 //        turkeyHeadObject4.translateAninimation(turkeyHead4);
 
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int x = (int)event.getX();
+        int y = (int)event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
+        }
+        return false;
+    }
+
+
     public void cloudMotion(){
         ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);
         cloud1.setVisibility(View.VISIBLE);
@@ -317,6 +427,21 @@ public class MainActivity extends AppCompatActivity  {
         pointsText.bringToFront();
 
         playTurkeyCry();
+
+
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+
+        ImageView turkeyAngel = new ImageView(getApplicationContext());
+        turkeyAngel.setImageResource(R.drawable.turkey_body);
+        turkeyAngel.setVisibility(View.VISIBLE);
+        turkeyAngel.setMaxWidth(50);
+        turkeyAngel.setMaxHeight(50);
+        relativeLayout.addView(turkeyAngel);
+
+        turkeyAngel.animate().translationY(-2000).setDuration(1000);
+
+
+
 
     }
 
