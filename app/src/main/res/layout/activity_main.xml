@@ -19,6 +19,7 @@
         android:textColor="#d7d5d5" />
 
     <LinearLayout
+        android:id="@+id/blood_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

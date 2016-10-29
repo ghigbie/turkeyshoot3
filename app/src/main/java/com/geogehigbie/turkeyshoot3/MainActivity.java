@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity  {
     private int touchXLocation;
     private int touchYLocation;
 
+    private int recursionCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +103,6 @@ public class MainActivity extends AppCompatActivity  {
     public void animateTurkeyHeads(){
 
         //these values control turkey head behavior
-
         int numberOfTurkeys = 4;
         int turkeyHeight = 100;
         int turkeyWidth = 100;
@@ -178,7 +179,6 @@ public class MainActivity extends AppCompatActivity  {
                     turkeyHead2.animate().translationY(baseStartValueY);
                     turkeyHead3.animate().translationY(baseStartValueY);
                     turkeyHead4.animate().translationY(baseStartValueY);
-
                 }
 
                 @Override
@@ -196,22 +196,56 @@ public class MainActivity extends AppCompatActivity  {
             turkeyHeadImageArray[a].setClickable(true);
             turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
 
                         turkeyShot();
                         v.getX();
                         v.getY();
+                        v.animate().alpha(0f).setDuration(400).start();
+                        v.animate().setListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                v.animate().alpha(1).setDuration(1);
+                                v.animate().setStartDelay(510);
+                                v.animate().start();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
+
 
                     final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
                     final ImageView turkeyAngel = new ImageView(getApplicationContext());
                     turkeyAngel.setImageResource(R.drawable.blood_splatter);
+                    turkeyAngel.clearAnimation();
                     turkeyAngel.setVisibility(View.VISIBLE);
-                    turkeyAngel.setMaxWidth(50);
-                    turkeyAngel.setMaxHeight(50);
-                    turkeyAngel.setX(v.getX());
-                    turkeyAngel.setY(v.getY());
+                    turkeyAngel.setAlpha(1f);
+                    turkeyAngel.setMaxWidth(500);
+                    turkeyAngel.setMaxHeight(500);
+                    turkeyAngel.setX(v.getX()-300);
+                    turkeyAngel.setY(v.getY()+300);
                     relativeLayout.addView(turkeyAngel);
+
+                    turkeyAngel.animate()
+                            .alpha(0f)
+                            .setDuration(500)
+                            .start();
+
+
 
 
 
