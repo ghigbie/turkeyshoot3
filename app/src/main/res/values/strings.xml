@@ -3,4 +3,5 @@
     <string name="score">Score</string>
     <string name="high_score">High Score</string>
     <string name="reload">TAP HERE TO RELOAD</string>
+    <string name="click_play">Click to Play</string>
 </resources>

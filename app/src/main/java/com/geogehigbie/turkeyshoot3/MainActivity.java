@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity  {
 
     private int numberOfBullets = 4;
 
-    private ImageView bullet1;
-    private ImageView bullet2;
-    private ImageView bullet3;
-    private ImageView bullet4;
+//    private ImageView bullet1;
+//    private ImageView bullet2;
+//    private ImageView bullet3;
+//    private ImageView bullet4;
 
-    private ImageView [] bulletArray;
+    //private ImageView [] bulletArray;
 
     private int touchCount = 0;
 
@@ -63,32 +63,88 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     public void loadBullets(){
+        touchCount = 0;
+
+        numberOfBullets = 4;
 
         LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
         topLinearLayout.bringToFront();
 
-        bullet1 = (ImageView) findViewById(R.id.bullet1);
-        bullet2 = (ImageView) findViewById(R.id.bullet2);
-        bullet1 = (ImageView) findViewById(R.id.bullet3);
-        bullet2 = (ImageView) findViewById(R.id.bullet4);
+        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
+        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
+        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
+        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
 
-        bulletArray = new ImageView[] {bullet1, bullet2, bullet3, bullet4};
+        bullet1.setVisibility(View.VISIBLE);
+        bullet2.setVisibility(View.VISIBLE);
+        bullet3.setVisibility(View.VISIBLE);
+        bullet4.setVisibility(View.VISIBLE);
+        //bulletArray = new ImageView[] {bullet1, bullet2, bullet3, bullet4};
 
     }
 
-    public void onClickReload(){
-        numberOfBullets = 4;
-
-        for(int a = 0; a < bulletArray.length; a++){
-            bulletArray[a].setVisibility(View.VISIBLE);
-        }
+    public void reloadBullets(){
 
         touchCount = 0;
 
+        Button reloadNow = (Button) findViewById(R.id.reload_button);
+        reloadNow.setVisibility(View.INVISIBLE);
+
+        numberOfBullets = 4;
+
+        LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
+        topLinearLayout.bringToFront();
+
+        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
+        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
+        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
+        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
+
+        bullet1.setVisibility(View.VISIBLE);
+        bullet2.setVisibility(View.VISIBLE);
+        bullet3.setVisibility(View.VISIBLE);
+        bullet4.setVisibility(View.VISIBLE);
+
     }
 
-    public void onTouch(){
+
+//    public void onClickWood(){
+//        touchCount++;
+
+//        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
+//        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
+//        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
+//        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
+
+//        switch(touchCount){
+//            case 1:
+//                //bullet1.setVisibility(View.INVISIBLE);
+//                numberOfBullets = 3;
+//                break;
+//            case 2:
+//               // bullet2.setVisibility(View.INVISIBLE);
+//                numberOfBullets = 2;
+//                break;
+//            case 3:
+//               // bullet3.setVisibility(View.INVISIBLE);
+//                numberOfBullets = 1;
+//                break;
+//            case 4:
+//               // bullet4.setVisibility(View.INVISIBLE);
+//                reloadNow();
+//                numberOfBullets = 0;
+//                break;
+//        }
+//    }
+
+    public void reduceBullets(){
+
         touchCount++;
+
+        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
+        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
+        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
+        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
 
         switch(touchCount){
             case 1:
@@ -105,15 +161,37 @@ public class MainActivity extends AppCompatActivity  {
                 break;
             case 4:
                 bullet4.setVisibility(View.INVISIBLE);
+                reloadNow();
                 numberOfBullets = 0;
                 break;
-
         }
+
+    }
+
+
+    public void reloadNow(){
+
+        final Button reloadNow = (Button) findViewById(R.id.reload_button);
+        reloadNow.setVisibility(View.VISIBLE);
+        reloadNow.bringToFront();
+
+        reloadNow.setClickable(true);
+        reloadNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadNow.setVisibility(View.INVISIBLE);
+
+                loadBullets();
+
+            }
+        });
+
     }
 
 
 
     public void clickToPlay(View view){
+        touchCount = 0;
         initialAnimation();
         animateTurkeyHeads();
         playInitialGobble();
@@ -567,11 +645,12 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public void turkeyShot(){
+        reduceBullets();
         points += 10;
 
         Log.i("points", "turkeyShot: called ");
         TextView pointsText = (TextView) findViewById(R.id.score);
-        pointsText.setText("Points " + Integer.toString(points));
+        pointsText.setText("Score " + Integer.toString(points));
         pointsText.bringToFront();
 
         playTurkeyCry();

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6"
-    android:onClick="onTouch"
     tools:context="com.geogehigbie.turkeyshoot3.MainActivity">
 
     <TextView
@@ -29,15 +28,22 @@
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="#d7d5d5" />
 
-    <TextView
-        android:id="@+id/reload_text"
+    <Button
+        android:id="@+id/reload_button"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="5dp"
         android:layout_width="wrap_content"
+        android:background="@color/button_background"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:text="@string/reload"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="#d7d5d5" />
+        android:textStyle="bold"
+        android:textColor="#d7d5d5"
+        android:visibility="invisible"
+        android:onClick="reloadBullets"/>
 
     <LinearLayout
         android:id="@+id/reload"
@@ -46,8 +52,7 @@
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:weightSum="4"
-        android:onClick="onClickReload">
+        android:weightSum="4">
 
         <ImageView
             android:id="@+id/bullet1"
@@ -88,6 +93,7 @@
 
 
         <LinearLayout
+
             android:id="@+id/sky_layout"
             android:layout_width="match_parent"
             android:layout_height="250dp"
@@ -114,6 +120,7 @@
         </LinearLayout>
 
         <LinearLayout
+
             android:id="@+id/grass"
             android:layout_width="match_parent"
             android:layout_height="225dp"
@@ -138,7 +145,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:onClick="onClickTurkey1"
                     android:src="@drawable/small_head"
                     android:translationY="60dp"
                     android:visibility="invisible"/>
@@ -148,7 +154,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:onClick="onClickTurkey2"
                     android:src="@drawable/small_head"
                     android:translationY="60dp"
                     android:visibility="invisible"/>
@@ -158,7 +163,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:onClick="onClickTurkey3"
                     android:src="@drawable/small_head"
                     android:translationY="60dp"
                     android:visibility="invisible"/>
@@ -168,7 +172,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:onClick="onClickTurkey4"
                     android:src="@drawable/small_head"
                     android:translationY="60dp"
                     android:visibility="invisible"/>
@@ -201,9 +204,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#ed6d11"
+        android:background="@color/button_background"
         android:onClick="clickToPlay"
-        android:text="  Click to Play  " />
+        android:text="@string/click_play"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"/>
+
 
 
 </RelativeLayout>
