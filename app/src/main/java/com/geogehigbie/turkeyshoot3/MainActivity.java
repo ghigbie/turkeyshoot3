@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity  {
     private int touchYLocation;
 
     private int recursionCount = 0;
+    private int numberOfHits = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,9 +168,15 @@ public class MainActivity extends AppCompatActivity  {
             yAnimTurkeyHead.setRepeatCount(20);
             yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
             yAnimTurkeyHead.start();
+
             yAnimTurkeyHead.addListener(new Animator.AnimatorListener() {
+
                 @Override
                 public void onAnimationStart(Animator animation) {
+//                    turkeyHead1.setVisibility(View.VISIBLE);
+//                    turkeyHead2.setVisibility(View.VISIBLE);
+//                    turkeyHead3.setVisibility(View.VISIBLE);
+//                    turkeyHead4.setVisibility(View.VISIBLE);
 
                 }
 
@@ -188,7 +195,10 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
+                    turkeyHead1.setVisibility(View.VISIBLE);
+                    turkeyHead2.setVisibility(View.VISIBLE);
+                    turkeyHead3.setVisibility(View.VISIBLE);
+                    turkeyHead4.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -197,22 +207,42 @@ public class MainActivity extends AppCompatActivity  {
             turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-
+                        numberOfHits++;
                         turkeyShot();
                         v.getX();
                         v.getY();
-                        v.animate().alpha(0f).setDuration(400).start();
+                        v.animate().rotationX(80).setDuration(500).start();
                         v.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
-
                             }
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                v.animate().alpha(1).setDuration(1);
-                                v.animate().setStartDelay(510);
-                                v.animate().start();
+
+                                v.animate().rotationX(0).setStartDelay(200).start();
+                                v.animate().setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        v.clearAnimation();
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                });
+
                             }
 
                             @Override
@@ -225,10 +255,13 @@ public class MainActivity extends AppCompatActivity  {
 
                             }
                         });
+                        v.animate().start();
 
 
                     final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
+
+                    //this creates the blood splatter
                     final ImageView turkeyAngel = new ImageView(getApplicationContext());
                     turkeyAngel.setImageResource(R.drawable.blood_splatter);
                     turkeyAngel.clearAnimation();
