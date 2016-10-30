@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +34,19 @@ public class MainActivity extends AppCompatActivity  {
     private int recursionCount = 0;
     private int numberOfHits = 0;
 
+    private int numberOfBullets = 4;
+
+    private ImageView bullet1;
+    private ImageView bullet2;
+    private ImageView bullet3;
+    private ImageView bullet4;
+
+    private ImageView [] bulletArray;
+
+    private int touchCount = 0;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +57,61 @@ public class MainActivity extends AppCompatActivity  {
 
        // animateTurkeyHeads();
 
+        loadBullets();
+
 
     }
+
+    public void loadBullets(){
+
+        LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
+        topLinearLayout.bringToFront();
+
+        bullet1 = (ImageView) findViewById(R.id.bullet1);
+        bullet2 = (ImageView) findViewById(R.id.bullet2);
+        bullet1 = (ImageView) findViewById(R.id.bullet3);
+        bullet2 = (ImageView) findViewById(R.id.bullet4);
+
+        bulletArray = new ImageView[] {bullet1, bullet2, bullet3, bullet4};
+
+    }
+
+    public void onClickReload(){
+        numberOfBullets = 4;
+
+        for(int a = 0; a < bulletArray.length; a++){
+            bulletArray[a].setVisibility(View.VISIBLE);
+        }
+
+        touchCount = 0;
+
+    }
+
+    public void onTouch(){
+        touchCount++;
+
+        switch(touchCount){
+            case 1:
+                bullet1.setVisibility(View.INVISIBLE);
+                numberOfBullets = 3;
+                break;
+            case 2:
+                bullet2.setVisibility(View.INVISIBLE);
+                numberOfBullets = 2;
+                break;
+            case 3:
+                bullet3.setVisibility(View.INVISIBLE);
+                numberOfBullets = 1;
+                break;
+            case 4:
+                bullet4.setVisibility(View.INVISIBLE);
+                numberOfBullets = 0;
+                break;
+
+        }
+    }
+
+
 
     public void clickToPlay(View view){
         initialAnimation();
@@ -53,6 +120,11 @@ public class MainActivity extends AppCompatActivity  {
         cloudMotion();
        // cowMotion();
 
+    }
+
+    public void bringBulletsToFront(){
+        LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
+        topLinearLayout.bringToFront();
     }
 
     // plays when the screen is open
@@ -103,18 +175,24 @@ public class MainActivity extends AppCompatActivity  {
 
     public void animateTurkeyHeads(){
 
+
+        ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
+        int TurkeyHeight = MeasurementTurkey.getHeight();
+
         //these values control turkey head behavior
         int numberOfTurkeys = 4;
         int turkeyHeight = 100;
         int turkeyWidth = 100;
         int baseStartValueX = 0;
         int baseEndValueX = 0;
-        final int baseStartValueY = 800;
-        int baseEndValueY = 90;
+        final int baseStartValueY = TurkeyHeight +100;
+        int baseEndValueY = 100;
         int baseDuration = 1500;
         int repeatCount = 10;
         int repeatMode = 10;
         boolean fillAfter = true;
+
+        //TODO: get height of each turkey head and set this to the be max for movement & needs to minus some value to keep below wood
 
         int startValue1 = baseStartValueY;
         int startValue2 = baseStartValueY;
@@ -144,6 +222,8 @@ public class MainActivity extends AppCompatActivity  {
 
 
         for(int a = 0; a < numberOfTurkeys; a++){
+            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
+
             Random random1 = new Random();
             int randomDecreaseValue = random1.nextInt(200);
             startValueArray[a] = startValueArray[a] - randomDecreaseValue;
@@ -212,6 +292,7 @@ public class MainActivity extends AppCompatActivity  {
                         v.getX();
                         v.getY();
                         v.animate().rotationX(80).setDuration(500).start();
+                        v.animate().alpha(0).setDuration(50).start();
                         v.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -219,7 +300,7 @@ public class MainActivity extends AppCompatActivity  {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-
+                                v.animate().alpha(1).setStartDelay(300).start();
                                 v.animate().rotationX(0).setStartDelay(200).start();
                                 v.animate().setListener(new Animator.AnimatorListener() {
                                     @Override
@@ -489,7 +570,7 @@ public class MainActivity extends AppCompatActivity  {
         points += 10;
 
         Log.i("points", "turkeyShot: called ");
-        TextView pointsText = (TextView) findViewById(R.id.points);
+        TextView pointsText = (TextView) findViewById(R.id.score);
         pointsText.setText("Points " + Integer.toString(points));
         pointsText.bringToFront();
 

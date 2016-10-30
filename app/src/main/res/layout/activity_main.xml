@@ -6,17 +6,78 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="6"
+    android:onClick="onTouch"
     tools:context="com.geogehigbie.turkeyshoot3.MainActivity">
 
     <TextView
-        android:id="@+id/points"
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/points"
+        android:text="@string/score"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="#d7d5d5" />
+
+    <TextView
+        android:id="@+id/high_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/score"
+        android:text="@string/high_score"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#d7d5d5" />
+
+    <TextView
+        android:id="@+id/reload_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/reload"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#d7d5d5" />
+
+    <LinearLayout
+        android:id="@+id/reload"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:weightSum="4"
+        android:onClick="onClickReload">
+
+        <ImageView
+            android:id="@+id/bullet1"
+            android:layout_width="@dimen/bullet_width"
+            android:layout_height="@dimen/bullet_height"
+            android:src="@drawable/bullet_less_margin"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/bullet2"
+            android:layout_width="@dimen/bullet_width"
+            android:layout_height="@dimen/bullet_height"
+            android:src="@drawable/bullet_less_margin"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/bullet3"
+            android:layout_width="@dimen/bullet_width"
+            android:layout_height="@dimen/bullet_height"
+            android:src="@drawable/bullet_less_margin"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/bullet4"
+            android:layout_width="@dimen/bullet_width"
+            android:layout_height="@dimen/bullet_height"
+            android:src="@drawable/bullet_less_margin"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/blood_container"
@@ -79,7 +140,8 @@
                     android:layout_weight="1"
                     android:onClick="onClickTurkey1"
                     android:src="@drawable/small_head"
-                    android:translationY="215dp" />
+                    android:translationY="60dp"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/turkey_head2"
@@ -88,7 +150,8 @@
                     android:layout_weight="1"
                     android:onClick="onClickTurkey2"
                     android:src="@drawable/small_head"
-                    android:translationY="215dp" />
+                    android:translationY="60dp"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/turkey_head3"
@@ -97,7 +160,8 @@
                     android:layout_weight="1"
                     android:onClick="onClickTurkey3"
                     android:src="@drawable/small_head"
-                    android:translationY="215dp" />
+                    android:translationY="60dp"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:id="@+id/turkey_head4"
@@ -106,7 +170,8 @@
                     android:layout_weight="1"
                     android:onClick="onClickTurkey4"
                     android:src="@drawable/small_head"
-                    android:translationY="215dp" />
+                    android:translationY="60dp"
+                    android:visibility="invisible"/>
 
             </LinearLayout>
 
