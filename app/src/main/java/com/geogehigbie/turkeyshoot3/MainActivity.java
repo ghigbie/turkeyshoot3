@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,7 +21,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity  {
 
     //level increase variables
-    int level = 2;
+    int level = 1;
     int durationLevelUp = 200 * level;
 
 
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity  {
     public void clickToPlay(View view){
         touchCount = 0;
         initialAnimation();
-        animateTurkeyHeads();
+        //animateTurkeyHeads();
 
         mediaPlayerClick.start();
 
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity  {
         ImageView turkeybody = (ImageView) findViewById(R.id.big_turkey_body);
         TurkeyBig turkeyBig1 = new TurkeyBig(turkeybody, 2000, 2000, 0, -2000, 0, 1700, 3000, 0, 0, true);
         turkeyBig1.translateAninimation(turkeybody);
+
 
         mediaPlayerGobble.start();
 
@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onAnimationEnd(Animation animation) {
                 button.setVisibility(View.GONE);
+                animateTurkeyHeads();
+
             }
 
             @Override
@@ -195,6 +197,7 @@ public class MainActivity extends AppCompatActivity  {
     //this method reduces the number of bullets
     public void reduceBullets(){
         touchCount++;
+        numberOfBullets--;
 
         ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
         ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
@@ -257,8 +260,8 @@ public class MainActivity extends AppCompatActivity  {
         turkeyHead2.setClickable(false);
         turkeyHead3.setClickable(false);
         turkeyHead4.setClickable(false);
-
     }
+
 
     public void makeTurkeyShootable(){
         ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
@@ -270,13 +273,6 @@ public class MainActivity extends AppCompatActivity  {
         turkeyHead2.setClickable(true);
         turkeyHead3.setClickable(true);
         turkeyHead4.setClickable(true);
-
-    }
-
-
-    public void levelUp(){
-        level = level++;
-        durationLevelUp = 200 * level;
     }
 
 
@@ -476,18 +472,18 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int x = (int)event.getX();
-        int y = (int)event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-        }
-        return false;
-    }
+//
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        int x = (int)event.getX();
+//        int y = (int)event.getY();
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//            case MotionEvent.ACTION_MOVE:
+//            case MotionEvent.ACTION_UP:
+//        }
+//        return false;
+//    }
 
 
     public void cloudMotion(){
@@ -530,6 +526,12 @@ public class MainActivity extends AppCompatActivity  {
         //plays the cry of the turkeys when they are dispatched
         mediaPlayerTurkeyCry.start();
 
+        if(numberKilled == 15){
+          //  levelUp();  //this keeps crashing
+        }
+
+
+
 
 
 //this code is for an alternative angel to fly after a turkey is dispatched
@@ -561,6 +563,7 @@ public class MainActivity extends AppCompatActivity  {
             missText.setTextSize(100);
         }
 
+        //missText.getAnimation().cancel();
 
         missText.animate().setDuration(500).alpha(1f).start();
         missText.animate().setListener(new Animator.AnimatorListener() {
@@ -587,6 +590,80 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    public void levelUp(){
 
+//        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+//        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+//        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+//        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+//
+//        turkeyHead1.getAnimation().cancel();
+//        turkeyHead2.getAnimation().cancel();
+//        turkeyHead3.getAnimation().cancel();
+//        turkeyHead4.getAnimation().cancel();
+
+        numberKilled = 0;
+        level = level++;
+        durationLevelUp = 200 * level;
+
+        levelUpText();
+
+    }
+
+    public void levelUpText(){
+
+        final TextView levelText = (TextView) findViewById(R.id.miss_text);
+        levelText.setVisibility(View.VISIBLE);
+        levelText.getAnimation().cancel();
+        levelText.bringToFront();
+        levelText.setText("Level " + Integer.toString(level));
+
+        levelText.animate().setDuration(1000).alpha(1f).start();
+        levelText.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                levelText.animate().alpha(0).setDuration(200).start();
+                levelText.animate().setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        animateTurkeyHeads();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+    }
 
 }
+
+
