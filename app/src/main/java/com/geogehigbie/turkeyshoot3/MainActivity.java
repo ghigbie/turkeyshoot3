@@ -135,12 +135,14 @@ public class MainActivity extends AppCompatActivity  {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(numberOfBullets > 0) {
+                    mediaPlayerGunShot.start();
+                }
+
                 reduceBullets();
                 showMissText();
 
-                if(touchCount > 0) {
-                    mediaPlayerGunShot.start();
-                }
 
             }
         });
@@ -555,12 +557,19 @@ public class MainActivity extends AppCompatActivity  {
         missText.setVisibility(View.VISIBLE);
         missText.bringToFront();
 
-        if(insultCount % 2 == 0){
-            missText.setText("YOU SUCK!");
-            missText.setTextSize(75);
-        }else{
-            missText.setText("Miss!");
-            missText.setTextSize(100);
+        if(numberOfBullets > 0) {
+            if (insultCount % 3 == 0) {
+                missText.setText("YOU SUCK!");
+                missText.setTextSize(75);
+            }
+            else{
+                missText.setText("Miss!");
+                missText.setTextSize(100);
+            }
+        }
+        else{
+                missText.setText("Reload!");
+                missText.setTextSize(75);
         }
 
         //missText.getAnimation().cancel();
