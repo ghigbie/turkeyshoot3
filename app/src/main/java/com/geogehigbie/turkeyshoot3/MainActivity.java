@@ -36,14 +36,17 @@ public class MainActivity extends AppCompatActivity  {
 
     private int numberOfBullets = 4;
 
-//    private ImageView bullet1;
-//    private ImageView bullet2;
-//    private ImageView bullet3;
-//    private ImageView bullet4;
+    private int touchCount = 0; //counts the number of times the screen is touched, i.e. number of bullets
 
-    //private ImageView [] bulletArray;
+    private int numberKilled = 0;
 
-    private int touchCount = 0;
+    private MediaPlayer mediaPlayerTurkeyCry;
+    private MediaPlayer mediaPlayerReload;
+    private MediaPlayer mediaPlayerGobble;
+    private MediaPlayer mediaPlayerGunShot;
+    private MediaPlayer mediaPlayerClick;
+
+    private int insultCount = 0;
 
 
 
@@ -52,9 +55,8 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setClickableArea(); //this is set first so that the number of bullets is displayed properly
+        defineMediaPlayers(); //defines the sounds to be played during the game
 
-        loadBullets(); //this makes the bullets visible and sets the touch count to zero
 
     }
 
@@ -63,9 +65,15 @@ public class MainActivity extends AppCompatActivity  {
         touchCount = 0;
         initialAnimation();
         animateTurkeyHeads();
-        playInitialGobble();
+
+        mediaPlayerClick.start();
+
         cloudMotion();
         // cowMotion();  //this has been removed for now
+
+        setClickableArea(); //this is set first so that the number of bullets is displayed properly
+
+        loadBullets(); //this makes the bullets visible and sets the touch count to zero
 
     }
 
@@ -76,22 +84,46 @@ public class MainActivity extends AppCompatActivity  {
         TurkeyBig turkeyBig1 = new TurkeyBig(turkeybody, 2000, 2000, 0, -2000, 0, 1700, 3000, 0, 0, true);
         turkeyBig1.translateAninimation(turkeybody);
 
-        playInitialGobble();
+        mediaPlayerGobble.start();
 
-        buttonAnimation();
+        buttonAnimation(); //the button is set the fade upon game start
+
     }
 
     //the button is set the fade upon game start
+    //button fades away when pressed
+    public void buttonAnimation(){
+        final Button button = (Button) findViewById(R.id.start_button);
+        button.setClickable(false);
+        Animation alphaAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_animation_long);
+        button.startAnimation(alphaAnimation);
+        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
 
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                button.setVisibility(View.GONE);
+            }
 
-    //plays the opening sound of the game, which is a turkey gobble
-    public void playInitialGobble(){
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_gobble);
-        mediaPlayer.start();
-        mediaPlayer.setLooping(false);
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
+            }
+        });
     }
+
+    //defines and sets up the media players to be used to play the sound effects
+    public void defineMediaPlayers(){
+        mediaPlayerTurkeyCry = MediaPlayer.create(this, R.raw.turkey_cry);
+        mediaPlayerReload = MediaPlayer.create(this, R.raw.reload_again);
+        mediaPlayerGobble = MediaPlayer.create(this, R.raw.turkey_gobble);
+        mediaPlayerGunShot = MediaPlayer.create(this, R.raw.shotgun_sound);
+        mediaPlayerClick = MediaPlayer.create(this, R.raw.click_on_sound);
+    }
+
 
 
     //sets the entire area of a screen to be clickable and which counts the number of shots!
@@ -101,7 +133,21 @@ public class MainActivity extends AppCompatActivity  {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               reduceBullets();
+                reduceBullets();
+                showMissText();
+
+                if(touchCount > 0) {
+                    mediaPlayerGunShot.start();
+                }
+
+            }
+        });
+
+        LinearLayout linearBulletLayout = (LinearLayout) findViewById(R.id.reload);
+        linearBulletLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadBullets();
             }
         });
 
@@ -111,6 +157,7 @@ public class MainActivity extends AppCompatActivity  {
     //makes the bullets visible and loads them for player use this is also called be reloadBullets method
     //ALSO IMPORTANT: MAKES TURKEYS SHOOTABLE via the maketurkeyShootable() method
     public void loadBullets(){
+        mediaPlayerReload.start(); //makes the reload sound
         touchCount = 0;
         numberOfBullets = 4;
 
@@ -135,20 +182,12 @@ public class MainActivity extends AppCompatActivity  {
     //makes the button invisible and resets the number of bullets via the load bullets method
     public void reloadBullets(){
 
-        playLoadClick();
+      //  mediaPlayerReload.start(); //makes the reload sound
 
         Button reloadNow = (Button) findViewById(R.id.reload_button);
         reloadNow.setVisibility(View.INVISIBLE);
 
         loadBullets();
-
-    }
-
-    //this is the sound of a gun reloading
-    public void playLoadClick(){
-
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.click_on_sound);
-        mediaPlayer.start();
 
     }
 
@@ -235,30 +274,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
-    //button fades away when pressed
-    public void buttonAnimation(){
-        final Button button = (Button) findViewById(R.id.start_button);
-        Animation alphaAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_animation_long);
-        button.startAnimation(alphaAnimation);
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                button.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-    }
-
     public void levelUp(){
         level = level++;
         durationLevelUp = 200 * level;
@@ -267,10 +282,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-
-
     public void animateTurkeyHeads(){
-
 
         ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
         int TurkeyHeight = MeasurementTurkey.getHeight();
@@ -282,7 +294,7 @@ public class MainActivity extends AppCompatActivity  {
         int baseStartValueX = 0;
         int baseEndValueX = 0;
         final int baseStartValueY = TurkeyHeight +100;
-        int baseEndValueY = 100;
+        final int baseEndValueY = 100;
         int baseDuration = 1500;
         int repeatCount = 10;
         int repeatMode = 10;
@@ -349,10 +361,6 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 public void onAnimationStart(Animator animation) {
-//                    turkeyHead1.setVisibility(View.VISIBLE);
-//                    turkeyHead2.setVisibility(View.VISIBLE);
-//                    turkeyHead3.setVisibility(View.VISIBLE);
-//                    turkeyHead4.setVisibility(View.VISIBLE);
 
                 }
 
@@ -362,6 +370,11 @@ public class MainActivity extends AppCompatActivity  {
                     turkeyHead2.animate().translationY(baseStartValueY);
                     turkeyHead3.animate().translationY(baseStartValueY);
                     turkeyHead4.animate().translationY(baseStartValueY);
+
+                    turkeyHead1.clearAnimation();
+                    turkeyHead2.clearAnimation();
+                    turkeyHead3.clearAnimation();
+                    turkeyHead4.clearAnimation();
                 }
 
                 @Override
@@ -387,6 +400,7 @@ public class MainActivity extends AppCompatActivity  {
                         turkeyShot();
                         v.getX();
                         v.getY();
+                        v.setClickable(false);
                         v.animate().rotationX(80).setDuration(500).start();
                         v.animate().alpha(0).setDuration(50).start();
                         v.animate().setListener(new Animator.AnimatorListener() {
@@ -396,6 +410,7 @@ public class MainActivity extends AppCompatActivity  {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
+                                v.setClickable(true);
                                 v.animate().alpha(1).setStartDelay(300).start();
                                 v.animate().rotationX(0).setStartDelay(200).start();
                                 v.animate().setListener(new Animator.AnimatorListener() {
@@ -439,165 +454,27 @@ public class MainActivity extends AppCompatActivity  {
 
 
                     //this creates the blood splatter
-                    final ImageView turkeyAngel = new ImageView(getApplicationContext());
-                    turkeyAngel.setImageResource(R.drawable.blood_splatter);
-                    turkeyAngel.clearAnimation();
-                    turkeyAngel.setVisibility(View.VISIBLE);
-                    turkeyAngel.setAlpha(1f);
-                    turkeyAngel.setMaxWidth(500);
-                    turkeyAngel.setMaxHeight(500);
-                    turkeyAngel.setX(v.getX()-300);
-                    turkeyAngel.setY(v.getY()+300);
-                    relativeLayout.addView(turkeyAngel);
+                    final ImageView turkeySplatter = new ImageView(getApplicationContext());
+                    turkeySplatter.setImageResource(R.drawable.splatter);
+                    turkeySplatter.clearAnimation();
+                    turkeySplatter.setVisibility(View.VISIBLE);
+                    turkeySplatter.setAlpha(1f);
+                    turkeySplatter.setMaxWidth(500);
+                    turkeySplatter.setMaxHeight(500);
+                    turkeySplatter.setX(v.getX()-300);
+                    turkeySplatter.setY(v.getY()+300);
+                    relativeLayout.addView(turkeySplatter);
 
-                    turkeyAngel.animate()
+                    turkeySplatter.animate()
                             .alpha(0f)
                             .setDuration(500)
                             .start();
-
-
-
-
-
-//                    if(v == turkeyHead1){
-//                            //turkeyHead1.setVisibility(View.);
-//                            turkeyHead1.setImageResource(R.drawable.blood_splatter_dark);
-//                            //yAnimTurkeyHead.end();
-//                        }
-//                        else if(v == turkeyHead2){
-//                           // turkeyHead2.setVisibility(View.GONE);
-//                            turkeyHead2.setImageResource(R.drawable.blood_splatter_dark);
-//                        }
-//                        else if(v == turkeyHead3){
-//                            //turkeyHead3.setVisibility(View.GONE);
-//                            turkeyHead3.setImageResource(R.drawable.blood_splatter_dark);
-//                        }
-//                        else if(v == turkeyHead4){
-//                            //turkeyHead4.setVisibility(View.GONE);
-//                            turkeyHead4.setImageResource(R.drawable.blood_splatter_dark);
-//                        }
                 }
             });
 
-//            final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-//
-//            final ImageView turkeyAngel = new ImageView(getApplicationContext());
-//            turkeyAngel.setImageResource(R.drawable.blood_splatter);
-//            turkeyAngel.setVisibility(View.VISIBLE);
-//            turkeyAngel.setMaxWidth(50);
-//            turkeyAngel.setMaxHeight(50);
-            //relativeLayout.addView(turkeyAngel);
-
-           // turkeyAngel.animate().translationY(-2000).setDuration(1000);
-
-
-//            turkeyHeadImageArray[a].setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN){
-//                        relativeLayout.addView(turkeyAngel);
-//                                turkeyAngel.setX(event.getX());
-//                                turkeyAngel.setY(event.getY());
-//                               // turkeyAngel.animate().translationY(-2000).setDuration(1000);
-//                    }
-//                    return true;
-//                }
-//            });
-
-
-
-            //these values below should be put into a control panel above
-            TurkeyHead turkeyHeadObject = new TurkeyHead(turkeyHeadImageArray[a], turkeyHeight, turkeyWidth, baseStartValueX,
-                    baseEndValueX, startValueArray[a], endValueArray[a], durationArray[a], repeatCount, repeatMode, fillAfter);
-
-          //  turkeyHeadObject.translateAninimation(turkeyHeadImageArray[a]);
-          //  turkeyHeadObject.objectAnimationMotionY(turkeyHeadImageArray[a]);
-
-
-            }
-
-//        ObjectAnimator yAnim = ObjectAnimator.ofFloat(turkeyHead1, "y",
-//                turkeyHead1.getY(), turkeyHead1.getHeight() - 50f);
-//        yAnim.setDuration(duration1);
-//        yAnim.setRepeatCount(20);
-//        yAnim.setRepeatMode(ValueAnimator.REVERSE);
-//       // yAnim.setInterpolator(new AccelerateInterpolator(2f));
-//        //yAnim.addUpdateListener(this);
-//        //yAnim.addListener(this);
-//        yAnim.start();
+        }
     }
 
-//
-//
-//
-//        Random random1 = new Random();
-//        int randomDecreaseValue1 = random1.nextInt(200);
-//        Random random2 = new Random();
-//        int randomDecreaseValue2 = random2.nextInt(200);
-//        Random random3 = new Random();
-//        int randomDecreaseValue3 = random3.nextInt(200);
-//        Random random4 = new Random();
-//        int randomDecreaseValue4 = random4.nextInt(200);
-
-//        startValue1 = startValue1 - randomDecreaseValue1;
-//        startValue2 = startValue2 - randomDecreaseValue2;
-//        startValue3 = startValue3 - randomDecreaseValue3;
-//        startValue4 = startValue4 - randomDecreaseValue4;
-//
-//        int endValue1 = baseEndValue;
-//        int endValue2 = baseEndValue;
-//        int endValue3 = baseEndValue;
-//        int endValue4 = baseEndValue;
-//
-//        Random random5 = new Random();
-//        int randomIncreaseValue1 = random5.nextInt(150);
-//        Random random6 = new Random();
-//        int randomIncreaseValue2 = random6.nextInt(150);
-//        Random random7 = new Random();
-//        int randomIncreaseValue3 = random7.nextInt(150);
-//        Random random8 = new Random();
-//        int randomIncreaseValue4 = random8.nextInt(150);
-//
-//        int duration1 = baseDuration;
-//        int duration2 = baseDuration;
-//        int duration3 = baseDuration;
-//        int duration4 = baseDuration;
-//
-//        Random random9 = new Random();
-//        int randomDecreaseDurationValue1 = random9.nextInt(300);
-//        Random random10 = new Random();
-//        int randomDecreaseDurationValue2 = random10.nextInt(300);
-//        Random random11 = new Random();
-//        int randomDecreaseDurationValue3 = random11.nextInt(300);
-//        Random random12 = new Random();
-//        int randomDecreaseDurationValue4 = random12.nextInt(300);
-//
-//        duration1 = baseDuration - randomDecreaseDurationValue1;
-//        duration2 = baseDuration - randomDecreaseDurationValue2;
-//        duration3 = baseDuration - randomDecreaseDurationValue3;
-//        duration4 = baseDuration - randomDecreaseDurationValue4;
-//
-//        endValue1 = endValue1 + randomIncreaseValue1;
-//        endValue2 = endValue2 + randomIncreaseValue2;
-//        endValue3 = endValue3 + randomIncreaseValue3;
-//        endValue4 = endValue4 + randomIncreaseValue4;
-//
-//        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
-//        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
-//        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
-//        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
-
-//
-//        TurkeyHead turkeyHeadObject1 = new TurkeyHead(turkeyHead1, 100, 300, 0, 0, startValue1, endValue1, duration1, 10, 10, true);
-//        TurkeyHead turkeyHeadObject2 = new TurkeyHead(turkeyHead1, 200, 400, 0, 0, startValue2, endValue2, duration2, 10, 10, true);
-//        TurkeyHead turkeyHeadObject3 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue3, endValue3, duration3, 10, 10, false);
-//        TurkeyHead turkeyHeadObject4 = new TurkeyHead(turkeyHead1, 200, 200, 0, 0, startValue4, endValue4, duration4, 10, 10, false);
-//
-//
-//        turkeyHeadObject1.translateAninimation(turkeyHead1);
-//        turkeyHeadObject2.translateAninimation(turkeyHead2);
-//        turkeyHeadObject3.translateAninimation(turkeyHead3);
-//        turkeyHeadObject4.translateAninimation(turkeyHead4);
 
 
     @Override
@@ -625,7 +502,6 @@ public class MainActivity extends AppCompatActivity  {
         cloudLeftToRight.translateAnimation(cloud1);
         cloudRightToLeft.translateAnimation(cloud2);
 
-
     }
 
 //    public void cowMotion(){
@@ -638,16 +514,9 @@ public class MainActivity extends AppCompatActivity  {
 //    }
 
 
-    public void playTurkeyCry(){
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_cry);
-        mediaPlayer.start();
-
-    }
-
-   // public static TextView pointsText = (TextView) findViewById(R.id.points);
-
-
+   // a method that does everything that it should when a turkey is shot
     public void turkeyShot(){
+        numberKilled++;
         reduceBullets();
         points += 10;
 
@@ -656,42 +525,68 @@ public class MainActivity extends AppCompatActivity  {
         pointsText.setText("Score " + Integer.toString(points));
         pointsText.bringToFront();
 
-        playTurkeyCry();
+        mediaPlayerGunShot.start(); //plays sound of shotgun
 
-
-        RelativeLayout relativeLayout = new RelativeLayout(this);
-
-        ImageView turkeyAngel = new ImageView(getApplicationContext());
-        turkeyAngel.setImageResource(R.drawable.turkey_body);
-        turkeyAngel.setVisibility(View.VISIBLE);
-        turkeyAngel.setMaxWidth(50);
-        turkeyAngel.setMaxHeight(50);
-        relativeLayout.addView(turkeyAngel);
-
-        turkeyAngel.animate().translationY(-2000).setDuration(1000);
+        //plays the cry of the turkeys when they are dispatched
+        mediaPlayerTurkeyCry.start();
 
 
 
+//this code is for an alternative angel to fly after a turkey is dispatched
+//        RelativeLayout relativeLayout = new RelativeLayout(this);
+//
+//        ImageView turkeyAngel = new ImageView(getApplicationContext());
+//        turkeyAngel.setImageResource(R.drawable.turkey_body);
+//        turkeyAngel.setVisibility(View.VISIBLE);
+//        turkeyAngel.setMaxWidth(50);
+//        turkeyAngel.setMaxHeight(50);
+//        relativeLayout.addView(turkeyAngel);
+//
+//        turkeyAngel.animate().translationY(-2000).setDuration(1000);
 
     }
 
-//
-//    public void onClickTurkey1(View view){
-//        turkeyShot();
-//    }
-//
-//
-//    public void onClickTurkey2(View view){
-//        turkeyShot();
-//    }
-//
-//
-//    public void onClickTurkey3(View view){
-//        turkeyShot();
-//    }
-//
-//
-//    public void onClickTurkey4(View view){
-//        turkeyShot();
-//    }
+    public void showMissText(){
+        insultCount++;
+
+        final TextView missText = (TextView) findViewById(R.id.miss_text);
+        missText.setVisibility(View.VISIBLE);
+        missText.bringToFront();
+
+        if(insultCount % 2 == 0){
+            missText.setText("YOU SUCK!");
+            missText.setTextSize(75);
+        }else{
+            missText.setText("Miss!");
+            missText.setTextSize(100);
+        }
+
+
+        missText.animate().setDuration(500).alpha(1f).start();
+        missText.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                missText.animate().alpha(0).setDuration(200).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+    }
+
+
+
 }

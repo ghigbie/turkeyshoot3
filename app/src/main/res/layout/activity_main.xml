@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/score"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="#d7d5d5" />
+        android:textColor="@color/standard_text_color" />
 
     <TextView
         android:id="@+id/high_score"
@@ -26,7 +26,7 @@
         android:layout_below="@+id/score"
         android:text="@string/high_score"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textColor="#d7d5d5" />
+        android:textColor="@color/standard_text_color" />
 
     <Button
         android:id="@+id/reload_button"
@@ -41,9 +41,20 @@
         android:text="@string/reload"
         android:textAppearance="?android:textAppearanceLarge"
         android:textStyle="bold"
-        android:textColor="#d7d5d5"
+        android:textColor="@color/standard_text_color"
         android:visibility="invisible"
         android:onClick="reloadBullets"/>
+
+    <TextView
+        android:id="@+id/miss_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/miss"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:textSize="100sp"
+        android:translationY="-30dp"
+        android:textColor="#ffffff"/>
 
     <LinearLayout
         android:id="@+id/reload"
