@@ -52,21 +52,71 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setClickableArea(); //this is set first so that the number of bullets is displayed properly
 
-       // initialAnimation();
+        loadBullets(); //this makes the bullets visible and sets the touch count to zero
 
-       // animateTurkeyHeads();
+    }
 
-        loadBullets();
+    //makes the game playable by setting the touchCount to zero and calling the animateTurkeyHeads method
+    public void clickToPlay(View view){
+        touchCount = 0;
+        initialAnimation();
+        animateTurkeyHeads();
+        playInitialGobble();
+        cloudMotion();
+        // cowMotion();  //this has been removed for now
+
+    }
+
+
+    // plays when the screen is open
+    public void initialAnimation(){
+        ImageView turkeybody = (ImageView) findViewById(R.id.big_turkey_body);
+        TurkeyBig turkeyBig1 = new TurkeyBig(turkeybody, 2000, 2000, 0, -2000, 0, 1700, 3000, 0, 0, true);
+        turkeyBig1.translateAninimation(turkeybody);
+
+        playInitialGobble();
+
+        buttonAnimation();
+    }
+
+    //the button is set the fade upon game start
+
+
+
+    //plays the opening sound of the game, which is a turkey gobble
+    public void playInitialGobble(){
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_gobble);
+        mediaPlayer.start();
+        mediaPlayer.setLooping(false);
+
+    }
+
+
+    //sets the entire area of a screen to be clickable and which counts the number of shots!
+    public void setClickableArea(){
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               reduceBullets();
+            }
+        });
 
 
     }
 
+    //makes the bullets visible and loads them for player use this is also called be reloadBullets method
+    //ALSO IMPORTANT: MAKES TURKEYS SHOOTABLE via the maketurkeyShootable() method
     public void loadBullets(){
         touchCount = 0;
-
         numberOfBullets = 4;
 
+        makeTurkeyShootable();
+
+        //this is the area where the bullets sit visually on the screen - they are initially hidden from view
         LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
         topLinearLayout.bringToFront();
 
@@ -79,66 +129,32 @@ public class MainActivity extends AppCompatActivity  {
         bullet2.setVisibility(View.VISIBLE);
         bullet3.setVisibility(View.VISIBLE);
         bullet4.setVisibility(View.VISIBLE);
-        //bulletArray = new ImageView[] {bullet1, bullet2, bullet3, bullet4};
 
     }
 
+    //makes the button invisible and resets the number of bullets via the load bullets method
     public void reloadBullets(){
 
-        touchCount = 0;
+        playLoadClick();
 
         Button reloadNow = (Button) findViewById(R.id.reload_button);
         reloadNow.setVisibility(View.INVISIBLE);
 
-        numberOfBullets = 4;
+        loadBullets();
 
-        LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
-        topLinearLayout.bringToFront();
+    }
 
-        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
-        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
-        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
-        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
+    //this is the sound of a gun reloading
+    public void playLoadClick(){
 
-        bullet1.setVisibility(View.VISIBLE);
-        bullet2.setVisibility(View.VISIBLE);
-        bullet3.setVisibility(View.VISIBLE);
-        bullet4.setVisibility(View.VISIBLE);
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.click_on_sound);
+        mediaPlayer.start();
 
     }
 
 
-//    public void onClickWood(){
-//        touchCount++;
-
-//        ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
-//        ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
-//        ImageView bullet3 = (ImageView) findViewById(R.id.bullet3);
-//        ImageView bullet4 = (ImageView) findViewById(R.id.bullet4);
-
-//        switch(touchCount){
-//            case 1:
-//                //bullet1.setVisibility(View.INVISIBLE);
-//                numberOfBullets = 3;
-//                break;
-//            case 2:
-//               // bullet2.setVisibility(View.INVISIBLE);
-//                numberOfBullets = 2;
-//                break;
-//            case 3:
-//               // bullet3.setVisibility(View.INVISIBLE);
-//                numberOfBullets = 1;
-//                break;
-//            case 4:
-//               // bullet4.setVisibility(View.INVISIBLE);
-//                reloadNow();
-//                numberOfBullets = 0;
-//                break;
-//        }
-//    }
-
+    //this method reduces the number of bullets
     public void reduceBullets(){
-
         touchCount++;
 
         ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
@@ -168,12 +184,16 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-
+    //tells the player to reload the bullets by making a button visible also sets the button invisible and calls the
+    //reloadBullets method, which calls the loadBullets method
+    //ALSO IMPORTANT: MAKES TURKEYS NOT SHOOTABLE via the maketurkeyNOTShootable() method
     public void reloadNow(){
 
         final Button reloadNow = (Button) findViewById(R.id.reload_button);
         reloadNow.setVisibility(View.VISIBLE);
         reloadNow.bringToFront();
+
+        makeTurkeyNOTShootable();
 
         reloadNow.setClickable(true);
         reloadNow.setOnClickListener(new View.OnClickListener() {
@@ -181,42 +201,40 @@ public class MainActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 reloadNow.setVisibility(View.INVISIBLE);
 
-                loadBullets();
+                reloadBullets();
 
             }
         });
 
     }
 
+    public void makeTurkeyNOTShootable(){
+        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
 
+        turkeyHead1.setClickable(false);
+        turkeyHead2.setClickable(false);
+        turkeyHead3.setClickable(false);
+        turkeyHead4.setClickable(false);
 
-    public void clickToPlay(View view){
-        touchCount = 0;
-        initialAnimation();
-        animateTurkeyHeads();
-        playInitialGobble();
-        cloudMotion();
-       // cowMotion();
+    }
+
+    public void makeTurkeyShootable(){
+        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+
+        turkeyHead1.setClickable(true);
+        turkeyHead2.setClickable(true);
+        turkeyHead3.setClickable(true);
+        turkeyHead4.setClickable(true);
 
     }
 
-    public void bringBulletsToFront(){
-        LinearLayout topLinearLayout = (LinearLayout) findViewById(R.id.reload);
-        topLinearLayout.bringToFront();
-    }
 
-    // plays when the screen is open
-    public void initialAnimation(){
-        ImageView turkeybody = (ImageView) findViewById(R.id.big_turkey_body);
-        TurkeyBig turkeyBig1 = new TurkeyBig(turkeybody, 2000, 2000, 0, -2000, 0, 1700, 3000, 0, 0, true);
-        turkeyBig1.translateAninimation(turkeybody);
-
-        playInitialGobble();
-
-        buttonAnimation();
-
-
-    }
 
     //button fades away when pressed
     public void buttonAnimation(){
@@ -619,21 +637,6 @@ public class MainActivity extends AppCompatActivity  {
 //        cowRighttoLeft.translateAnimation(cow1);
 //    }
 
-
-
-    public void playInitialGobble(){
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_gobble);
-        mediaPlayer.start();
-        mediaPlayer.setLooping(false);
-
-    }
-
-    public void playSoundEffects(){
-
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.click_on_sound);
-        mediaPlayer.start();
-
-    }
 
     public void playTurkeyCry(){
         MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.turkey_cry);
