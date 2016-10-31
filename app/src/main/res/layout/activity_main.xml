@@ -157,7 +157,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/small_head"
-                    android:translationY="65dp"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -166,7 +165,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/small_head"
-                    android:translationY="71dp"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -175,7 +173,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/small_head"
-                    android:translationY="68dp"
                     android:visibility="invisible"/>
 
                 <ImageView
@@ -184,7 +181,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:src="@drawable/small_head"
-                    android:translationY="73dp"
                     android:visibility="invisible"/>
 
             </LinearLayout>

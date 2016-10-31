@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-
+//controls the main animation of the turkey heads
     public void animateTurkeyHeads(){
 
         ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
@@ -287,16 +287,9 @@ public class MainActivity extends AppCompatActivity  {
 
         //these values control turkey head behavior
         int numberOfTurkeys = 4;
-        int turkeyHeight = 100;
-        int turkeyWidth = 100;
-        int baseStartValueX = 0;
-        int baseEndValueX = 0;
-        final int baseStartValueY = TurkeyHeight +100;
-        final int baseEndValueY = 100;
-        int baseDuration = 1500;
-        int repeatCount = 10;
-        int repeatMode = 10;
-        boolean fillAfter = true;
+        final int baseStartValueY = TurkeyHeight + 150; //sets the turkey's lower height, from where he animates or his hiding spot
+        final int baseEndValueY = 125; //sets the turkey's max top value, the lower the higher
+        int baseDuration = 1500; //this is the total time it will take for one animation
 
         //TODO: get height of each turkey head and set this to the be max for movement & needs to minus some value to keep below wood
 
@@ -329,32 +322,27 @@ public class MainActivity extends AppCompatActivity  {
 
         for(int a = 0; a < numberOfTurkeys; a++){
             turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
+            turkeyHeadImageArray[a].setY(250);
 
             Random random1 = new Random();
-            int randomDecreaseValue = random1.nextInt(200);
+            int randomDecreaseValue = random1.nextInt(200); //randomly sets the turkey's lower position
             startValueArray[a] = startValueArray[a] - randomDecreaseValue;
 
             Random random2 = new Random();
-            int randomIncreaseValue = random2.nextInt(150);
+            int randomIncreaseValue = random2.nextInt(50); //randomly changes the turkey's upper position
             endValueArray[a] = endValueArray[a] + randomIncreaseValue;
 
             Random random3 = new Random();
-            int randomDecreaseDurationValue = random3.nextInt(500);
+            int randomDecreaseDurationValue = random3.nextInt(400);//randomly changes the duration of each animation
             durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
 
-//            property animation - does not do as much
-//            turkeyHeadImageArray[a].animate()
-//                    .translationX(0)
-//                    .translationY(endValueArray[a])
-//                    .setDuration(durationArray[a]);
 
             final ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
                     endValueArray[a]);
             yAnimTurkeyHead.setDuration(durationArray[a]);
-            yAnimTurkeyHead.setRepeatCount(20);
+            yAnimTurkeyHead.setRepeatCount(21);
             yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
             yAnimTurkeyHead.start();
-
             yAnimTurkeyHead.addListener(new Animator.AnimatorListener() {
 
                 @Override
@@ -363,16 +351,8 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
                 @Override
-                public void onAnimationEnd(Animator animation) {
-                    turkeyHead1.animate().translationY(baseStartValueY);
-                    turkeyHead2.animate().translationY(baseStartValueY);
-                    turkeyHead3.animate().translationY(baseStartValueY);
-                    turkeyHead4.animate().translationY(baseStartValueY);
+                public void onAnimationEnd(Animator animation){
 
-                    turkeyHead1.clearAnimation();
-                    turkeyHead2.clearAnimation();
-                    turkeyHead3.clearAnimation();
-                    turkeyHead4.clearAnimation();
                 }
 
                 @Override
@@ -399,8 +379,8 @@ public class MainActivity extends AppCompatActivity  {
                         v.getX();
                         v.getY();
                         v.setClickable(false);
-                        v.animate().rotationX(80).setDuration(500).start();
-                        v.animate().alpha(0).setDuration(50).start();
+                        v.animate().rotationX(80).setDuration(600).start();
+                        v.animate().alpha(0).setDuration(500).start();
                         v.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -409,7 +389,7 @@ public class MainActivity extends AppCompatActivity  {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 v.setClickable(true);
-                                v.animate().alpha(1).setStartDelay(300).start();
+                                v.animate().alpha(1).setStartDelay(100).start();
                                 v.animate().rotationX(0).setStartDelay(200).start();
                                 v.animate().setListener(new Animator.AnimatorListener() {
                                     @Override
