@@ -3,6 +3,7 @@ package com.geogehigbie.turkeyshoot3;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,12 @@ public class MainActivity extends AppCompatActivity  {
     private MediaPlayer mediaPlayerClick;
 
     private int insultCount = 0;
+    private int numberOfMisses = 0;
+
+    private Handler handler;
+    private Runnable runnable;
+
+    private int timer = 0; //keeps track of time roughly so that if the game sits idle for too long, the game ends
 
 
 
@@ -52,7 +59,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         defineMediaPlayers(); //defines the sounds to be played during the game
-
 
     }
 
@@ -353,6 +359,12 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void onAnimationEnd(Animator animation){
 
+//                    if (numberKilled > 20) {
+//                        levelUpStart();
+//                    } else {
+//                        gameOver();
+//                    }
+
                 }
 
                 @Override
@@ -544,6 +556,8 @@ public class MainActivity extends AppCompatActivity  {
     public void showMissText(){
         insultCount++;
 
+        numberOfMisses++;
+
         final TextView missText = (TextView) findViewById(R.id.miss_text);
         missText.setVisibility(View.VISIBLE);
         missText.bringToFront();
@@ -590,28 +604,11 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-//    public void levelUp(){
-//
-////        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
-////        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
-////        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
-////        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
-////
-////        turkeyHead1.getAnimation().cancel();
-////        turkeyHead2.getAnimation().cancel();
-////        turkeyHead3.getAnimation().cancel();
-////        turkeyHead4.getAnimation().cancel();
-//
-//        numberKilled = 0;
-//        level = level++;
-//        durationLevelUp = 200 * level;
-//
-//        levelUpStart();
-//
-//    }
+
 
     public void levelUpStart(){
-
+        timer =0;
+        numberOfMisses = 0;
         numberKilled = 0;
         level++;
         durationLevelUp = 200 * level;
@@ -672,10 +669,11 @@ public class MainActivity extends AppCompatActivity  {
     public void gameOver() {
 
         final TextView overText = (TextView) findViewById(R.id.level_text);
+        overText.setText("Game Over");
+        overText.setTextSize(75);
         overText.setVisibility(View.VISIBLE);
         if (overText.getAnimation() != null) overText.getAnimation().cancel();
         overText.bringToFront();
-        overText.setText("Level " + Integer.toString(level));
 
         overText.animate().setDuration(3000).alpha(1f).start();
         overText.animate().setListener(new Animator.AnimatorListener() {
@@ -686,7 +684,11 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                overText.animate().alpha(0).setDuration(1000).start();
+               // overText.animate().alpha(0).setDuration(1000).start();
+                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+                relativeLayout.clearAnimation();
+
+               // relativeLayout.getAnimation().cancel();
             }
 
             @Override
@@ -699,25 +701,94 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
+
+        handler.removeCallbacks(runnable);
+
+        makeElementsFade();
+        final Button restart = (Button) findViewById(R.id.start_button);
+        restart.setVisibility(View.VISIBLE);
+        restart.setClickable(true);
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //clickToPlay(restart);
+                restart.animate().alpha(0).setDuration(300).start();
+                restart.setClickable(false);
+                rebirth();
+            }
+        });
     }
+
+    public void makeElementsFade(){
+        numberKilled = 0;
+        numberOfMisses = 0;
+
+        Button reloadButton = (Button) findViewById(R.id.reload_button);
+        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+
+        View[] stuffToBeInvisible = {reloadButton, turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
+
+        for (int a = 0; a < stuffToBeInvisible.length; a++){
+            stuffToBeInvisible[a].animate().alpha(0).setDuration(500).start();
+            stuffToBeInvisible[a].setClickable(false);
+            stuffToBeInvisible[a].animate().setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
+                    turkeyBody.animate().alpha(1).setDuration(1000).start();
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+
+    }
+
 
 
     public void checkStatus() {
 
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
+
+        handler = new Handler();
+        runnable = new Runnable() {
             @Override
             public void run() {
+                timer++;
 
-                if (numberKilled > 20) {
+                if (numberKilled > 25) {
                     levelUpStart();
-                } else {
+                }
+
+                if (numberOfMisses > 25 || timer > 250){
                     gameOver();
                 }
+                checkStatus();
             }
         };
 
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(runnable, 100);
+    }
+
+    public void rebirth(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }
