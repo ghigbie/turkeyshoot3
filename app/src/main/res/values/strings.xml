@@ -5,4 +5,5 @@
     <string name="reload">TAP HERE TO RELOAD</string>
     <string name="click_play">Click to Play</string>
     <string name="miss">Miss!</string>
+    <string name="level">Level 1</string>
 </resources>

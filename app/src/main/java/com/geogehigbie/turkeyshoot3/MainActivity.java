@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,12 +27,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public int points = 0;
-
-    private int touchXLocation;
-    private int touchYLocation;
-
-    private int recursionCount = 0;
-    private int numberOfHits = 0;
+    private int highScoreInt;
 
     private int numberOfBullets = 4;
 
@@ -49,6 +45,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +58,9 @@ public class MainActivity extends AppCompatActivity  {
 
     //makes the game playable by setting the touchCount to zero and calling the animateTurkeyHeads method
     public void clickToPlay(View view){
+
+        checkStatus();
+
         touchCount = 0;
         initialAnimation();
         //animateTurkeyHeads();
@@ -374,7 +374,6 @@ public class MainActivity extends AppCompatActivity  {
             turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                        numberOfHits++;
                         turkeyShot();
                         v.getX();
                         v.getY();
@@ -399,7 +398,14 @@ public class MainActivity extends AppCompatActivity  {
 
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
+                                        // v.animate().cancel();
                                         v.clearAnimation();
+
+//                                        if (numberKilled > 10) {
+//                                            levelUpStart(); //this keeps crashing
+//                                        } else {
+//                                            gameOver();
+//                                        }
                                     }
 
                                     @Override
@@ -503,14 +509,19 @@ public class MainActivity extends AppCompatActivity  {
         pointsText.setText("Score " + Integer.toString(points));
         pointsText.bringToFront();
 
+
+        TextView highScore = (TextView) findViewById(R.id.high_score);
+        highScore.setText("High Score " + Integer.toString(highScoreInt));
+        highScore.bringToFront();
+
         mediaPlayerGunShot.start(); //plays sound of shotgun
 
         //plays the cry of the turkeys when they are dispatched
         mediaPlayerTurkeyCry.start();
 
-        if(numberKilled == 15){
-          //  levelUp();  //this keeps crashing
-        }
+//        if(numberKilled == 15){
+//            levelUpStart();  //this keeps crashing
+//        }
 
 
 
@@ -579,35 +590,40 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public void levelUp(){
-
-//        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
-//        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
-//        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
-//        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+//    public void levelUp(){
 //
-//        turkeyHead1.getAnimation().cancel();
-//        turkeyHead2.getAnimation().cancel();
-//        turkeyHead3.getAnimation().cancel();
-//        turkeyHead4.getAnimation().cancel();
+////        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+////        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+////        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+////        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+////
+////        turkeyHead1.getAnimation().cancel();
+////        turkeyHead2.getAnimation().cancel();
+////        turkeyHead3.getAnimation().cancel();
+////        turkeyHead4.getAnimation().cancel();
+//
+//        numberKilled = 0;
+//        level = level++;
+//        durationLevelUp = 200 * level;
+//
+//        levelUpStart();
+//
+//    }
+
+    public void levelUpStart(){
 
         numberKilled = 0;
-        level = level++;
+        level++;
         durationLevelUp = 200 * level;
 
-        levelUpText();
 
-    }
-
-    public void levelUpText(){
-
-        final TextView levelText = (TextView) findViewById(R.id.miss_text);
+        final TextView levelText = (TextView) findViewById(R.id.level_text);
         levelText.setVisibility(View.VISIBLE);
-        levelText.getAnimation().cancel();
+        if(levelText.getAnimation()!=null)levelText.getAnimation().cancel();
         levelText.bringToFront();
         levelText.setText("Level " + Integer.toString(level));
 
-        levelText.animate().setDuration(1000).alpha(1f).start();
+        levelText.animate().setDuration(3000).alpha(1f).start();
         levelText.animate().setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -616,7 +632,7 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                levelText.animate().alpha(0).setDuration(200).start();
+                levelText.animate().alpha(0).setDuration(1000).start();
                 levelText.animate().setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -653,6 +669,56 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-}
+    public void gameOver() {
 
+        final TextView overText = (TextView) findViewById(R.id.level_text);
+        overText.setVisibility(View.VISIBLE);
+        if (overText.getAnimation() != null) overText.getAnimation().cancel();
+        overText.bringToFront();
+        overText.setText("Level " + Integer.toString(level));
+
+        overText.animate().setDuration(3000).alpha(1f).start();
+        overText.animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                overText.animate().alpha(0).setDuration(1000).start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+
+    public void checkStatus() {
+
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (numberKilled > 20) {
+                    levelUpStart();
+                } else {
+                    gameOver();
+                }
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);
+    }
+
+}
 
