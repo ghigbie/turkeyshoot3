@@ -494,6 +494,28 @@ public class MainActivity extends AppCompatActivity  {
                             .alpha(0f)
                             .setDuration(500)
                             .start();
+
+                    turkeySplatter.animate().setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            turkeySplatter.animate().cancel();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
                 }
             });
 
