@@ -5,4 +5,9 @@
     <dimen name="bullet_margin">10dp</dimen>
     <dimen name="bullet_width">5dp</dimen>
     <dimen name="bullet_height">30dp</dimen>
+    <dimen name="button_padding_left">10dp</dimen>
+    <dimen name="button_padding_right">10dp</dimen>
+    <dimen name="button_padding_top">20dp</dimen>
+    <dimen name="button_padding_bottom">20dp</dimen>
 </resources>
+

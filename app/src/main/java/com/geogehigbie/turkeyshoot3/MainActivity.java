@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        RelativeLayout relativeLayoutMain = (RelativeLayout) findViewById(R.id.activity_main);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+        alphaAnimation.setDuration(3000);
+        alphaAnimation.setFillAfter(true);
+        relativeLayoutMain.startAnimation(alphaAnimation);
 
         defineMediaPlayers(); //defines the sounds to be played during the game
 
@@ -391,7 +399,7 @@ public class MainActivity extends AppCompatActivity  {
                         v.getY();
                         v.setClickable(false);
                         v.animate().rotationX(80).setDuration(600).start();
-                        v.animate().alpha(0).setDuration(500).start();
+                        v.animate().alpha(0).setDuration(200).start();
                         v.animate().setListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -679,7 +687,6 @@ public class MainActivity extends AppCompatActivity  {
         overText.animate().setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
             }
 
             @Override
@@ -704,8 +711,20 @@ public class MainActivity extends AppCompatActivity  {
 
         handler.removeCallbacks(runnable);
 
+
+        ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        turkeyBody.setLayoutParams(lp);
+        turkeyBody.setVisibility(View.VISIBLE);
+        turkeyBody.getAnimation().reset();
+
         makeElementsFade();
         final Button restart = (Button) findViewById(R.id.start_button);
+        restart.setText("Replay");
         restart.setVisibility(View.VISIBLE);
         restart.setClickable(true);
         restart.setOnClickListener(new View.OnClickListener() {
@@ -714,10 +733,33 @@ public class MainActivity extends AppCompatActivity  {
                 //clickToPlay(restart);
                 restart.animate().alpha(0).setDuration(300).start();
                 restart.setClickable(false);
-                rebirth();
+
+                //this should make the entire layout fade out
+                RelativeLayout relativeLayoutMain = (RelativeLayout) findViewById(R.id.activity_main);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
+                alphaAnimation.setDuration(4000);
+                alphaAnimation.setFillAfter(true);
+                relativeLayoutMain.startAnimation(alphaAnimation);
+                alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        rebirth();
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         });
     }
+
 
     public void makeElementsFade(){
         numberKilled = 0;
@@ -732,19 +774,25 @@ public class MainActivity extends AppCompatActivity  {
         View[] stuffToBeInvisible = {reloadButton, turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
 
         for (int a = 0; a < stuffToBeInvisible.length; a++){
-            stuffToBeInvisible[a].animate().alpha(0).setDuration(500).start();
+            stuffToBeInvisible[a].animate().alpha(0).setDuration(700).start();
             stuffToBeInvisible[a].setClickable(false);
             stuffToBeInvisible[a].animate().setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
-                    turkeyBody.animate().alpha(1).setDuration(1000).start();
 
+                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.MATCH_PARENT);
+                    turkeyBody.setLayoutParams(lp);
+
+                    turkeyBody.animate().alpha(1).setDuration(1000).start();
+                    turkeyBody.bringToFront();
                 }
 
                 @Override
@@ -754,17 +802,15 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 public void onAnimationRepeat(Animator animation) {
-
                 }
             });
         }
-
     }
 
 
 
+    //this method checks to see if a the level should be increased or if the game will be over
     public void checkStatus() {
-
 
         handler = new Handler();
         runnable = new Runnable() {
@@ -786,6 +832,7 @@ public class MainActivity extends AppCompatActivity  {
         handler.postDelayed(runnable, 100);
     }
 
+    //this relaunches the app
     public void rebirth(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
