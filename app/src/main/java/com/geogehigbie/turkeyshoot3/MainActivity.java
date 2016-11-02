@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
                 reduceBullets();
+
                 showMissText();
 
 
@@ -564,7 +565,7 @@ public class MainActivity extends AppCompatActivity  {
     public void showMissText(){
         insultCount++;
 
-        numberOfMisses++;
+        //numberOfMisses++;
 
         final TextView missText = (TextView) findViewById(R.id.miss_text);
         missText.setVisibility(View.VISIBLE);
@@ -574,10 +575,12 @@ public class MainActivity extends AppCompatActivity  {
             if (insultCount % 3 == 0) {
                 missText.setText("YOU SUCK!");
                 missText.setTextSize(75);
+                numberOfMisses++;
             }
             else{
                 missText.setText("Miss!");
                 missText.setTextSize(100);
+                numberOfMisses++;
             }
         }
         else{
@@ -692,6 +695,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onAnimationEnd(Animator animation) {
                // overText.animate().alpha(0).setDuration(1000).start();
+
                 RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
                 relativeLayout.clearAnimation();
 
@@ -711,18 +715,22 @@ public class MainActivity extends AppCompatActivity  {
 
         handler.removeCallbacks(runnable);
 
-
-        ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
-
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        turkeyBody.setLayoutParams(lp);
-        turkeyBody.setVisibility(View.VISIBLE);
-        turkeyBody.getAnimation().reset();
-
         makeElementsFade();
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+
+//        ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
+
+//        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT,
+//                RelativeLayout.LayoutParams.MATCH_PARENT);
+//        turkeyBody.setLayoutParams(lp);
+//        turkeyBody.setVisibility(View.VISIBLE);
+//        turkeyBody.getAnimation().reset();
+
+        relativeLayout.setClickable(false);
+        makeElementsFade();
+
         final Button restart = (Button) findViewById(R.id.start_button);
         restart.setText("Replay");
         restart.setVisibility(View.VISIBLE);
@@ -761,7 +769,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    public void makeElementsFade(){
+    public void makeElementsFade() {
         numberKilled = 0;
         numberOfMisses = 0;
 
@@ -773,37 +781,39 @@ public class MainActivity extends AppCompatActivity  {
 
         View[] stuffToBeInvisible = {reloadButton, turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
 
-        for (int a = 0; a < stuffToBeInvisible.length; a++){
+        for (int a = 0; a < stuffToBeInvisible.length; a++) {
             stuffToBeInvisible[a].animate().alpha(0).setDuration(700).start();
             stuffToBeInvisible[a].setClickable(false);
-            stuffToBeInvisible[a].animate().setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
-
-                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            RelativeLayout.LayoutParams.MATCH_PARENT);
-                    turkeyBody.setLayoutParams(lp);
-
-                    turkeyBody.animate().alpha(1).setDuration(1000).start();
-                    turkeyBody.bringToFront();
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
+//            stuffToBeInvisible[a].animate().setListener(new Animator.AnimatorListener() {
+//                @Override
+//                public void onAnimationStart(Animator animation) {
+//                }
+//
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+////                    ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
+////
+////                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+////                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+////                            RelativeLayout.LayoutParams.MATCH_PARENT,
+////                            RelativeLayout.LayoutParams.MATCH_PARENT);
+////                    turkeyBody.setLayoutParams(lp);
+////
+////                    turkeyBody.animate().alpha(1).setDuration(1000).start();
+////                    turkeyBody.bringToFront();
+//                }
+//
+//                @Override
+//                public void onAnimationCancel(Animator animation) {
+//
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animator animation) {
+//                }
+//            });
+//        }
+//    }
         }
     }
 
@@ -818,7 +828,7 @@ public class MainActivity extends AppCompatActivity  {
             public void run() {
                 timer++;
 
-                if (numberKilled > 25) {
+                if (numberKilled > 20) {
                     levelUpStart();
                 }
 
@@ -831,6 +841,9 @@ public class MainActivity extends AppCompatActivity  {
 
         handler.postDelayed(runnable, 100);
     }
+
+
+
 
     //this relaunches the app
     public void rebirth(){
