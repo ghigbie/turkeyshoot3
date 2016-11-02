@@ -297,6 +297,8 @@ public class MainActivity extends AppCompatActivity  {
 //controls the main animation of the turkey heads
     public void animateTurkeyHeads(){
 
+        int animationEndCount = 0;
+
         ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
         int TurkeyHeight = MeasurementTurkey.getHeight();
 
@@ -368,12 +370,34 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void onAnimationEnd(Animator animation){
 
-//                    if (numberKilled > 20) {
-//                        levelUpStart();
-//                    } else {
-//                        gameOver();
-//                    }
 
+                    yAnimTurkeyHead.cancel();
+
+//                    ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+//                    ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+//                    ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+//                    ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+//
+//                    LinearLayout turkeyContainer = (LinearLayout) findViewById(R.id.turkey_container);
+//
+//
+//                    animationEndCount++;
+//                    v.clearAnimation();
+//
+//                    if(animationEndCount >= 4){
+//
+//
+//                        turkeyContainer.removeView();
+//                        turkeyContainer.removeView(turkeyHead2);
+//                        turkeyContainer.removeView(turkeyHead3);
+//                        turkeyContainer.removeView(turkeyHead4);
+//                        animationEndCount = 0;
+//
+//                        turkeyHead1.clearAnimation();
+//                        turkeyHead2.clearAnimation();
+//                        turkeyHead3.clearAnimation();
+//                        turkeyHead4.clearAnimation();
+//                    }
                 }
 
                 @Override
@@ -395,6 +419,7 @@ public class MainActivity extends AppCompatActivity  {
             turkeyHeadImageArray[a].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+
                         turkeyShot();
                         v.getX();
                         v.getY();
@@ -408,6 +433,7 @@ public class MainActivity extends AppCompatActivity  {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
+
                                 v.setClickable(true);
                                 v.animate().alpha(1).setStartDelay(100).start();
                                 v.animate().rotationX(0).setStartDelay(200).start();
@@ -419,14 +445,8 @@ public class MainActivity extends AppCompatActivity  {
 
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
-                                        // v.animate().cancel();
-                                        v.clearAnimation();
 
-//                                        if (numberKilled > 10) {
-//                                            levelUpStart(); //this keeps crashing
-//                                        } else {
-//                                            gameOver();
-//                                        }
+
                                     }
 
                                     @Override
@@ -452,7 +472,7 @@ public class MainActivity extends AppCompatActivity  {
 
                             }
                         });
-                        v.animate().start();
+                      //  v.animate().start();
 
 
                     final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
@@ -508,6 +528,8 @@ public class MainActivity extends AppCompatActivity  {
         cloudRightToLeft.translateAnimation(cloud2);
 
     }
+
+
 
 //    public void cowMotion(){
 //        ImageView cow1 = (ImageView) findViewById(R.id.cow1);
@@ -718,16 +740,6 @@ public class MainActivity extends AppCompatActivity  {
         makeElementsFade();
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
 
-//        ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
-
-//        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-//        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-//                RelativeLayout.LayoutParams.MATCH_PARENT,
-//                RelativeLayout.LayoutParams.MATCH_PARENT);
-//        turkeyBody.setLayoutParams(lp);
-//        turkeyBody.setVisibility(View.VISIBLE);
-//        turkeyBody.getAnimation().reset();
-
         relativeLayout.setClickable(false);
         makeElementsFade();
 
@@ -784,36 +796,6 @@ public class MainActivity extends AppCompatActivity  {
         for (int a = 0; a < stuffToBeInvisible.length; a++) {
             stuffToBeInvisible[a].animate().alpha(0).setDuration(700).start();
             stuffToBeInvisible[a].setClickable(false);
-//            stuffToBeInvisible[a].animate().setListener(new Animator.AnimatorListener() {
-//                @Override
-//                public void onAnimationStart(Animator animation) {
-//                }
-//
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-////                    ImageView turkeyBody = (ImageView) findViewById(R.id.big_turkey_body);
-////
-////                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-////                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-////                            RelativeLayout.LayoutParams.MATCH_PARENT,
-////                            RelativeLayout.LayoutParams.MATCH_PARENT);
-////                    turkeyBody.setLayoutParams(lp);
-////
-////                    turkeyBody.animate().alpha(1).setDuration(1000).start();
-////                    turkeyBody.bringToFront();
-//                }
-//
-//                @Override
-//                public void onAnimationCancel(Animator animation) {
-//
-//                }
-//
-//                @Override
-//                public void onAnimationRepeat(Animator animation) {
-//                }
-//            });
-//        }
-//    }
         }
     }
 
