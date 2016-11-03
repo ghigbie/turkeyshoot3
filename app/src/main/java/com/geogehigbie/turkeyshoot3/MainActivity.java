@@ -830,7 +830,7 @@ public class MainActivity extends AppCompatActivity  {
             stuffToBeInvisible[a].setClickable(false);
         }
 
-        mediaPlayerAlive.start();
+        mediaPlayerAlive.start(); //this is a problem
 
 
 
