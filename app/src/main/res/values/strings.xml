@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TurkeyShoot3</string>
+    <string name="app_name">Turkey Blaster</string>
     <string name="score">Score</string>
     <string name="high_score">High Score</string>
     <string name="reload">TAP HERE TO RELOAD</string>
