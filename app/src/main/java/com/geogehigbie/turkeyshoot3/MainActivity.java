@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity  {
 
         defineMediaPlayers(); //defines the sounds to be played during the game
 
+
     }
 
     //makes the game playable by setting the touchCount to zero and calling the animateTurkeyHeads method
@@ -90,7 +92,9 @@ public class MainActivity extends AppCompatActivity  {
 
         setClickableArea(); //this is set first so that the number of bullets is displayed properly
 
-        loadBullets(); //this makes the bullets visible and sets the touch count to zero
+        loadBullets();//this makes the bullets visible and sets the touch count to zero
+
+        loadHighScore();
 
     }
 
@@ -869,6 +873,9 @@ public class MainActivity extends AppCompatActivity  {
         runnable = new Runnable() {
             @Override
             public void run() {
+
+                setHighScore();
+
                 timer++;
 
                 if (numberKilled > 23) {
@@ -903,6 +910,29 @@ public class MainActivity extends AppCompatActivity  {
         for(int a =0; a < imageArray.length; a++){
             imageArray[a].clearAnimation();
         }
+    }
+
+    //loads the high score to the page
+    public void loadHighScore(){
+
+        SharedPreferences highScoreSetter  = getSharedPreferences("highScoreFile", 0);
+        highScoreInt = highScoreSetter.getInt("highScore", highScoreInt);
+
+
+    }
+
+    //this sets the high score
+    public void setHighScore(){
+
+        if(highScoreInt < points){
+            highScoreInt = points;
+        }
+
+        SharedPreferences highScoreSetter = getSharedPreferences("highScoreFile", 0);
+        SharedPreferences.Editor editor = highScoreSetter.edit();
+        editor.putInt("highScore", highScoreInt);
+
+        editor.commit();
     }
 
 
