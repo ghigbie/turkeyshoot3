@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity  {
         mediaPlayerGunShot = MediaPlayer.create(this, R.raw.shotgun_sound);
         mediaPlayerClick = MediaPlayer.create(this, R.raw.click_on_sound);
         mediaPlayerReloadWarning = MediaPlayer.create(this, R.raw.reload_mp3);
-        mediaPlayerAlive = MediaPlayer.create(this, R.raw.alive);
+        mediaPlayerAlive = MediaPlayer.create(this, R.raw.alive2);
     }
 
 
@@ -710,12 +710,16 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-
+    //this ends the game
     public void gameOver() {
         handler.removeCallbacks(runnable); //stops the handler
 
         makeElementsFadeAndHide();
 
+        animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
+
+        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
+        mediaPlayerAlive.start();
 
 
         //puts the game over text on the screen
@@ -752,11 +756,9 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-
+        //get relative layout and makes it unclickable
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-
         relativeLayout.setClickable(false);
-       // makeElementsFadeAndHide();
 
         final Button restart = (Button) findViewById(R.id.start_button);
         restart.setText("Replay");
@@ -767,10 +769,11 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 //clickToPlay(restart);
+                mediaPlayerAlive.stop();
                 restart.animate().alpha(0).setDuration(1500).start();
                 restart.setClickable(false);
 
-                //this should make the entire layout fade out
+                //this should make the entire layout fade out and after the layout is faded away, the game reloads
                 RelativeLayout relativeLayoutMain = (RelativeLayout) findViewById(R.id.activity_main);
                 AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
                 alphaAnimation.setDuration(4000);
@@ -797,25 +800,18 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    //this method reanimates the turkeys to make them unclickable and also hides the other elements
     public void makeElementsFadeAndHide() {
         numberKilled = 0;  //this resets the number killed to zero
         numberOfMisses = 0; //this resets the number of misses to zero
 
+//        animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
+//
+//        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
+//        mediaPlayerAlive.start();
 
-        //makes the turkeys descend
-        ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
-        ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
-        ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
-        ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
 
-        final ImageView [] turkeyHeadArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
-
-        for(int a = 0; a < turkeyHeadArray.length; a++){
-            turkeyHeadArray[a].setClickable(false);
-            turkeyHeadArray[a].animate().translationY(1300).setDuration(2000).start();
-        }
-
-        //makes elements fade and become unclickable
+        //gathers all the clickable screen elemenst and hides them
         Button reloadButton = (Button) findViewById(R.id.reload_button);
         ImageView bullet1 = (ImageView) findViewById(R.id.bullet1);
         ImageView bullet2 = (ImageView) findViewById(R.id.bullet2);
@@ -830,16 +826,10 @@ public class MainActivity extends AppCompatActivity  {
             stuffToBeInvisible[a].setClickable(false);
         }
 
-        mediaPlayerAlive.start(); //this is a problem
-
-
-
-
     }
 
 
-
-    //this method checks to see if a the level should be increased or if the game will be over
+    //this method checks to see if the level should be increased or if the game will be over
     public void checkStatus() {
 
         handler = new Handler();
@@ -859,11 +849,6 @@ public class MainActivity extends AppCompatActivity  {
                 if (endCount >= 4 && numberKilled < 23){
                     gameOver();
                 }
-
-//                if (endCount >= 4 && numberOfMisses > 25){
-//                    gameOver();
-//                }
-
                 checkStatus();
             }
         };
@@ -874,8 +859,96 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
+    public void animateTurkeyHeadsWithoutKilling() {
+
+        ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
+        int TurkeyHeight = MeasurementTurkey.getHeight();
+
+        //these values control turkey head behavior
+        int numberOfTurkeys = 4;
+        final int baseStartValueY = TurkeyHeight + 150; //sets the turkey's lower height, from where he animates or his hiding spot
+        final int baseEndValueY = 125; //sets the turkey's max top value, the lower the higher
+        int baseDuration = 1500; //this is the total time it will take for one animation
+
+        int startValue1 = baseStartValueY;
+        int startValue2 = baseStartValueY;
+        int startValue3 = baseStartValueY;
+        int startValue4 = baseStartValueY;
+
+        int endValue1 = baseEndValueY;
+        int endValue2 = baseEndValueY;
+        int endValue3 = baseEndValueY;
+        int endValue4 = baseEndValueY;
+
+        int duration1 = baseDuration;
+        int duration2 = baseDuration;
+        int duration3 = baseDuration;
+        int duration4 = baseDuration;
+
+        final ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        final ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        final ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        final ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+
+        int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
+        int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
+        int[] durationArray = {duration1, duration2, duration3, duration4};
+
+        final ImageView[] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
+
+
+        for (int a = 0; a < numberOfTurkeys; a++) {
+            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
+            turkeyHeadImageArray[a].setY(250);
+            turkeyHeadImageArray[a].setClickable(false); //does not allow the turkeys to be cliked on
+
+            Random random1 = new Random();
+            int randomDecreaseValue = random1.nextInt(200); //randomly sets the turkey's lower position
+            startValueArray[a] = startValueArray[a] - randomDecreaseValue;
+
+            Random random2 = new Random();
+            int randomIncreaseValue = random2.nextInt(50); //randomly changes the turkey's upper position
+            endValueArray[a] = endValueArray[a] + randomIncreaseValue;
+
+            Random random3 = new Random();
+            int randomDecreaseDurationValue = random3.nextInt(400);//randomly changes the duration of each animation
+            durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
+
+
+            final ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
+                    endValueArray[a]);
+            yAnimTurkeyHead.setDuration(durationArray[a]);
+            yAnimTurkeyHead.setRepeatCount(11);
+            yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
+            yAnimTurkeyHead.start();
+            yAnimTurkeyHead.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) { }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mediaPlayerAlive.stop(); //when animation is over the sound stops
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) { }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) { }
+            });
+        }
+    }
+
+
+
+
     //this relaunches the app
     public void rebirth(){
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+        relativeLayout.clearAnimation();
+
+        mediaPlayerAlive.stop();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
