@@ -716,7 +716,7 @@ public class MainActivity extends AppCompatActivity  {
 
         makeElementsFadeAndHide();
 
-        animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
+       // animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
 
         mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
         mediaPlayerAlive.start();
@@ -800,15 +800,10 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    //this method reanimates the turkeys to make them unclickable and also hides the other elements
+    //this makes elements unclickable and also hides the other elements
     public void makeElementsFadeAndHide() {
         numberKilled = 0;  //this resets the number killed to zero
         numberOfMisses = 0; //this resets the number of misses to zero
-
-//        animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
-//
-//        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
-//        mediaPlayerAlive.start();
 
 
         //gathers all the clickable screen elemenst and hides them
@@ -824,6 +819,44 @@ public class MainActivity extends AppCompatActivity  {
         for (int a = 0; a < stuffToBeInvisible.length; a++) {
             stuffToBeInvisible[a].animate().alpha(0).setDuration(700).start();
             stuffToBeInvisible[a].setClickable(false);
+        }
+
+
+        final ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
+        final ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
+        final ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
+        final ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+        final ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);
+        final ImageView cloud2 = (ImageView) findViewById(R.id.cloud2);
+
+        final ImageView [] imageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4, cloud1, cloud2};
+
+        for (int a = 0; a < imageArray.length; a++) {
+            imageArray[a].setClickable(false);
+            imageArray[a].animate().alpha(0).setDuration(10000).start();
+            imageArray[a].animate().setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mediaPlayerAlive.stop();
+                    cancelImageAnimation();
+
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
         }
 
     }
@@ -856,89 +889,21 @@ public class MainActivity extends AppCompatActivity  {
         handler.postDelayed(runnable, 100);
     }
 
-
-
-
-    public void animateTurkeyHeadsWithoutKilling() {
-
-        ImageView MeasurementTurkey = (ImageView) findViewById(R.id.turkey_head1);
-        int TurkeyHeight = MeasurementTurkey.getHeight();
-
-        //these values control turkey head behavior
-        int numberOfTurkeys = 4;
-        final int baseStartValueY = TurkeyHeight + 150; //sets the turkey's lower height, from where he animates or his hiding spot
-        final int baseEndValueY = 125; //sets the turkey's max top value, the lower the higher
-        int baseDuration = 1500; //this is the total time it will take for one animation
-
-        int startValue1 = baseStartValueY;
-        int startValue2 = baseStartValueY;
-        int startValue3 = baseStartValueY;
-        int startValue4 = baseStartValueY;
-
-        int endValue1 = baseEndValueY;
-        int endValue2 = baseEndValueY;
-        int endValue3 = baseEndValueY;
-        int endValue4 = baseEndValueY;
-
-        int duration1 = baseDuration;
-        int duration2 = baseDuration;
-        int duration3 = baseDuration;
-        int duration4 = baseDuration;
-
+    //cancels the animations of all images on the screen
+    public void cancelImageAnimation(){
         final ImageView turkeyHead1 = (ImageView) findViewById(R.id.turkey_head1);
         final ImageView turkeyHead2 = (ImageView) findViewById(R.id.turkey_head2);
         final ImageView turkeyHead3 = (ImageView) findViewById(R.id.turkey_head3);
         final ImageView turkeyHead4 = (ImageView) findViewById(R.id.turkey_head4);
+        final ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);
+        final ImageView cloud2 = (ImageView) findViewById(R.id.cloud2);
 
-        int[] startValueArray = {startValue1, startValue2, startValue3, startValue4};
-        int[] endValueArray = {endValue1, endValue2, endValue3, endValue4};
-        int[] durationArray = {duration1, duration2, duration3, duration4};
+        final ImageView [] imageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4, cloud1, cloud2};
 
-        final ImageView[] turkeyHeadImageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4};
-
-
-        for (int a = 0; a < numberOfTurkeys; a++) {
-            turkeyHeadImageArray[a].setVisibility(View.VISIBLE);
-            turkeyHeadImageArray[a].setY(250);
-            turkeyHeadImageArray[a].setClickable(false); //does not allow the turkeys to be cliked on
-
-            Random random1 = new Random();
-            int randomDecreaseValue = random1.nextInt(200); //randomly sets the turkey's lower position
-            startValueArray[a] = startValueArray[a] - randomDecreaseValue;
-
-            Random random2 = new Random();
-            int randomIncreaseValue = random2.nextInt(50); //randomly changes the turkey's upper position
-            endValueArray[a] = endValueArray[a] + randomIncreaseValue;
-
-            Random random3 = new Random();
-            int randomDecreaseDurationValue = random3.nextInt(400);//randomly changes the duration of each animation
-            durationArray[a] = durationArray[a] - randomDecreaseDurationValue - durationLevelUp;
-
-
-            final ObjectAnimator yAnimTurkeyHead = ObjectAnimator.ofFloat(turkeyHeadImageArray[a], "y", startValueArray[a],
-                    endValueArray[a]);
-            yAnimTurkeyHead.setDuration(durationArray[a]);
-            yAnimTurkeyHead.setRepeatCount(11);
-            yAnimTurkeyHead.setRepeatMode(ValueAnimator.REVERSE);
-            yAnimTurkeyHead.start();
-            yAnimTurkeyHead.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) { }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mediaPlayerAlive.stop(); //when animation is over the sound stops
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) { }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) { }
-            });
+        for(int a =0; a < imageArray.length; a++){
+            imageArray[a].clearAnimation();
         }
     }
-
 
 
 
