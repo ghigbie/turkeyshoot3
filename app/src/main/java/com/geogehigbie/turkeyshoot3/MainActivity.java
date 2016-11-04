@@ -718,12 +718,13 @@ public class MainActivity extends AppCompatActivity  {
     public void gameOver() {
         handler.removeCallbacks(runnable); //stops the handler
 
+        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
+        mediaPlayerAlive.start();
+
         makeElementsFadeAndHide();
 
        // animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
 
-        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
-        mediaPlayerAlive.start();
 
 
         //puts the game over text on the screen
@@ -940,12 +941,14 @@ public class MainActivity extends AppCompatActivity  {
     //this relaunches the app
     public void rebirth(){
 
+
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
         relativeLayout.clearAnimation();
 
         mediaPlayerAlive.stop();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
 }
