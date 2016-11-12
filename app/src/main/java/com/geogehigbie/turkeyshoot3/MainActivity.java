@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,13 +41,13 @@ public class MainActivity extends AppCompatActivity  {
 
     private int numberKilled = 0;
 
-    private MediaPlayer mediaPlayerTurkeyCry;
-    private MediaPlayer mediaPlayerReload;
-    private MediaPlayer mediaPlayerGobble;
-    private MediaPlayer mediaPlayerGunShot;
-    private MediaPlayer mediaPlayerClick;
-    private MediaPlayer mediaPlayerReloadWarning;
-    private MediaPlayer mediaPlayerAlive;
+//    private MediaPlayer mediaPlayerTurkeyCry;
+//    private MediaPlayer mediaPlayerReload;
+//    private MediaPlayer mediaPlayerGobble;
+//    private MediaPlayer mediaPlayerGunShot;
+//    private MediaPlayer mediaPlayerClick;
+    //private MediaPlayer mediaPlayerReloadWarning;
+    //private MediaPlayer mediaPlayerAlive;
 
     private int insultCount = 0;
     private int numberOfMisses = 0;
@@ -73,6 +72,8 @@ public class MainActivity extends AppCompatActivity  {
     int soundClick;
     int soundReloadWarning;
     int soundAlive;
+
+    boolean isGameOver;
 
 
     @Override
@@ -160,12 +161,12 @@ public class MainActivity extends AppCompatActivity  {
     //defines and sets up the media players to be used to play the sound effects
     public void defineMediaPlayers(){
        // mediaPlayerTurkeyCry = MediaPlayer.create(this, R.raw.turkey_cry);
-        mediaPlayerReload = MediaPlayer.create(this, R.raw.reload_again);
-        mediaPlayerGobble = MediaPlayer.create(this, R.raw.turkey_gobble);
-        mediaPlayerGunShot = MediaPlayer.create(this, R.raw.shotgun_sound);
-        mediaPlayerClick = MediaPlayer.create(this, R.raw.click_on_sound);
-        mediaPlayerReloadWarning = MediaPlayer.create(this, R.raw.reload_mp3);
-        mediaPlayerAlive = MediaPlayer.create(this, R.raw.alive2);
+//        mediaPlayerReload = MediaPlayer.create(this, R.raw.reload_again);
+//        mediaPlayerGobble = MediaPlayer.create(this, R.raw.turkey_gobble);
+//        mediaPlayerGunShot = MediaPlayer.create(this, R.raw.shotgun_sound);
+//        mediaPlayerClick = MediaPlayer.create(this, R.raw.click_on_sound);
+//        mediaPlayerReloadWarning = MediaPlayer.create(this, R.raw.reload_mp3);
+ //       mediaPlayerAlive = MediaPlayer.create(this, R.raw.alive2);
     }
 
 
@@ -229,8 +230,8 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 else{
                     //makes a reload warning sound
-                    mediaPlayerReloadWarning.start();
-                    //soundPool.play(soundReloadWarning, 1f, 1f, 1, 0, 1);
+                    //mediaPlayerReloadWarning.start();
+                    soundPool.play(soundReloadWarning, 1f, 1f, 1, 0, 1);
                     makeTurkeyNOTShootable();
                 }
 
@@ -783,95 +784,97 @@ public class MainActivity extends AppCompatActivity  {
 
     //this ends the game
     public void gameOver() {
-        handler.removeCallbacks(runnable); //stops the handler
+        if (isGameOver != true) {
 
-        //plays the mocking sound
-       // soundPool.play(soundAlive, 1f, 1f, 1, 10, 1);
+            handler.removeCallbacks(runnable); //stops the handler
+
+            //plays the mocking sound
+            soundPool.play(soundAlive, 1f, 1f, 1, 3, 1);
 //
-        mediaPlayerAlive.setLooping(true); //plays the sound that mocks the player
-        mediaPlayerAlive.start();
+            //mediaPlayerAlive.setLooping(false); //plays the sound that mocks the player
+            // mediaPlayerAlive.start();
 
-        makeElementsFadeAndHide();
+            makeElementsFadeAndHide();
 
-       // animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
+            // animateTurkeyHeadsWithoutKilling();//this method call animates unclickable turkeys
 
 
+            //puts the game over text on the screen
+            final TextView overText = (TextView) findViewById(R.id.level_text);
+            overText.setText("Game Over");
+            overText.setTextSize(75);
+            overText.setVisibility(View.VISIBLE);
+            if (overText.getAnimation() != null) overText.getAnimation().cancel();
+            overText.bringToFront();
 
-        //puts the game over text on the screen
-        final TextView overText = (TextView) findViewById(R.id.level_text);
-        overText.setText("Game Over");
-        overText.setTextSize(75);
-        overText.setVisibility(View.VISIBLE);
-        if (overText.getAnimation() != null) overText.getAnimation().cancel();
-        overText.bringToFront();
+            overText.animate().setDuration(1000).alpha(1.0f).start();
+            overText.animate().setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
 
-        overText.animate().setDuration(1000).alpha(1.0f).start();
-        overText.animate().setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
+                @Override
+                public void onAnimationEnd(Animator animation) {
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
+                    //these two lines clear all animations that happen on the relative layout
+                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+                    relativeLayout.clearAnimation();
 
-                //these two lines clear all animations that happen on the relative layout
-                RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-                relativeLayout.clearAnimation();
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                }
 
-            }
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                }
+            });
 
-            }
-        });
+            //get relative layout and makes it unclickable
+            RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
+            relativeLayout.setClickable(false);
 
-        //get relative layout and makes it unclickable
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
-        relativeLayout.setClickable(false);
+            final Button restart = (Button) findViewById(R.id.start_button);
+            restart.setText("Replay");
+            restart.setVisibility(View.VISIBLE);
+            restart.setClickable(true);
+            restart.setOnClickListener(new View.OnClickListener() {
 
-        final Button restart = (Button) findViewById(R.id.start_button);
-        restart.setText("Replay");
-        restart.setVisibility(View.VISIBLE);
-        restart.setClickable(true);
-        restart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //clickToPlay(restart);
 
-            @Override
-            public void onClick(View v) {
-                //clickToPlay(restart);
-                //mediaPlayerAlive.stop();
-                restart.animate().alpha(0).setDuration(1500).start();
-                restart.setClickable(false);
+                    restart.animate().alpha(0).setDuration(1500).start();
+                    restart.setClickable(false);
 
-                //this should make the entire layout fade out and after the layout is faded away, the game reloads
-                RelativeLayout relativeLayoutMain = (RelativeLayout) findViewById(R.id.activity_main);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
-                alphaAnimation.setDuration(4000);
-                alphaAnimation.setFillAfter(true);
-                relativeLayoutMain.startAnimation(alphaAnimation);
-                alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                    //this should make the entire layout fade out and after the layout is faded away, the game reloads
+                    RelativeLayout relativeLayoutMain = (RelativeLayout) findViewById(R.id.activity_main);
+                    AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
+                    alphaAnimation.setDuration(4000);
+                    alphaAnimation.setFillAfter(true);
+                    relativeLayoutMain.startAnimation(alphaAnimation);
+                    alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        rebirth(); //this calls the application again, i.e. it restarts the game
-                    }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            rebirth(); //this calls the application again, i.e. it restarts the game
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                    }
-                });
-            }
-        });
+                        }
+                    });
+                }
+            });
+        }
     }
 
 
@@ -904,7 +907,7 @@ public class MainActivity extends AppCompatActivity  {
         final ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);
         final ImageView cloud2 = (ImageView) findViewById(R.id.cloud2);
 
-        final ImageView [] imageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4, cloud1, cloud2};
+        final ImageView[] imageArray = {turkeyHead1, turkeyHead2, turkeyHead3, turkeyHead4, cloud1, cloud2};
 
         for (int a = 0; a < imageArray.length; a++) {
             imageArray[a].setClickable(false);
@@ -917,7 +920,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    //mediaPlayerAlive.stop();
+
                     cancelImageAnimation();
 
                 }
@@ -953,14 +956,24 @@ public class MainActivity extends AppCompatActivity  {
                     levelUpStart();
                 }
 
-                if (numberOfMisses > 25 || timer > 250){
+
+                if (numberOfMisses > 23 || timer > 250){
                     gameOver();
+                    isGameOver = true;
+                    handler.removeCallbacks(runnable);
                 }
+
+
 
                 if (endCount >= 4 && numberKilled < 23){
                     gameOver();
+                    isGameOver = true;
+                    handler.removeCallbacks(runnable);
+
                 }
+
                 checkStatus();
+
             }
         };
 
@@ -1015,7 +1028,7 @@ public class MainActivity extends AppCompatActivity  {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_main);
         relativeLayout.clearAnimation();
 
-        mediaPlayerAlive.stop();
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
