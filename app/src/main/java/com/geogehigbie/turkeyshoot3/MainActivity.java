@@ -41,14 +41,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private int numberKilled = 0;
 
-//    private MediaPlayer mediaPlayerTurkeyCry;
-//    private MediaPlayer mediaPlayerReload;
-//    private MediaPlayer mediaPlayerGobble;
-//    private MediaPlayer mediaPlayerGunShot;
-//    private MediaPlayer mediaPlayerClick;
-    //private MediaPlayer mediaPlayerReloadWarning;
-    //private MediaPlayer mediaPlayerAlive;
-
     private int insultCount = 0;
     private int numberOfMisses = 0;
 
