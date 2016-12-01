@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity  {
                 public void onAnimationEnd(Animator animation){
 
                     yAnimTurkeyHead.cancel();
-                    endCount++;
+                    //endCount++;
 
                 }
 
@@ -715,7 +715,7 @@ public class MainActivity extends AppCompatActivity  {
 
         //these variables are reset to keep the game playable
         endCount = 0;
-        timer =0;
+        timer = 0;
         numberOfMisses = 0;
         numberKilled = 0;
         level++;
@@ -945,6 +945,10 @@ public class MainActivity extends AppCompatActivity  {
                 timer++;
 
                 if (numberKilled > 23) {
+                    endCount =0;
+                    numberOfMisses = 0;
+                    timer = 0;
+                    numberKilled = 0;
                     levelUpStart();
                 }
 
