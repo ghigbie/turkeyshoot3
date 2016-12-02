@@ -586,7 +586,7 @@ public class MainActivity extends AppCompatActivity  {
 //        return false;
 //    }
 
-
+    //controls the motion of the cloud
     public void cloudMotion(){
         ImageView cloud1 = (ImageView) findViewById(R.id.cloud1);
         cloud1.setVisibility(View.VISIBLE);
