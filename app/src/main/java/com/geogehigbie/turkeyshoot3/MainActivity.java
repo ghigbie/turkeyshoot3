@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity  {
                 public void onAnimationEnd(Animator animation){
 
                     yAnimTurkeyHead.cancel();
-                    //endCount++;
+                    endCount++;
 
                 }
 
@@ -961,7 +961,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-                if (endCount >= 4 && numberKilled < 23){
+                if (endCount >= 4 && numberOfMisses > 23){
                     gameOver();
                     isGameOver = true;
                     handler.removeCallbacks(runnable);
