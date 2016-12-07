@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+
+
 public class MainActivity extends AppCompatActivity  {
 
     //level increase variables
@@ -953,7 +955,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
 
-                if (numberOfMisses > 23 || timer > 250){
+                if (numberOfMisses > 15 || timer > 250){
                     gameOver();
                     isGameOver = true;
                     handler.removeCallbacks(runnable);
