@@ -962,12 +962,10 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
 
-
                 if (endCount >= 4 && numberOfMisses > 23){
                     gameOver();
                     isGameOver = true;
                     handler.removeCallbacks(runnable);
-
                 }
 
                 checkStatus();
